@@ -1,0 +1,64 @@
+import React, { useState } from "react";
+import { AppBar, Toolbar, Typography, Button, Box, Drawer, IconButton, Container } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+
+const Navbar = () => {
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const toggleDrawer = (open) => {
+    setOpenDrawer(open);
+  };
+
+  return (
+    <AppBar position="absolute" color="primary" sx={{
+      width: "100%",
+      top: 0,
+      left: 0,
+    }}>
+      <Toolbar>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: "100%" }}>
+          {/* Logo or Title */}
+          <Typography to="/" variant="h6">
+            Emotion Matcher
+          </Typography>
+
+          {/* Mobile Menu Icon */}
+          <IconButton
+            color="inherit"
+            aria-label="open menu"
+            edge="end"
+            onClick={() => toggleDrawer(true)}
+            sx={{ display: { xs: "block", md: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          {/* Desktop Links */}
+          <Box display="flex" gap={2} sx={{ display: { xs: "none", md: "flex" } }}>
+            <Button color="inherit" to="/">Home</Button>
+            <Button color="inherit" to="/about">About</Button>
+            <Button color="inherit" to="/games">Games</Button>
+            <Button color="inherit" to="/profile">Profile</Button>
+            <Button color="inherit" to="/profile">Settings</Button>
+          </Box>
+        </Box>
+      </Toolbar>
+
+      {/* Drawer (Sidebar) for Mobile */}
+      <Drawer anchor="right" open={openDrawer} onClose={() => toggleDrawer(false)}>
+        <Box p={2} width={250} role="presentation">
+          <Typography variant="h6" sx={{ mb: 2 }}>Menu</Typography>
+          <Button color="inherit" fullWidth to="/" onClick={() => toggleDrawer(false)}>Home</Button>
+          <Button color="inherit" fullWidth to="/about" onClick={() => toggleDrawer(false)}>About</Button>
+          <Button color="inherit" fullWidth to="/games" onClick={() => toggleDrawer(false)}>Games</Button>
+          <Button color="inherit" fullWidth to="/profile" onClick={() => toggleDrawer(false)}>Profile</Button>
+          <Button color="inherit" fullWidth to="/settings" onClick={() => toggleDrawer(false)}>Settings</Button>
+        </Box>
+      </Drawer>
+    </AppBar>
+  );
+};
+
+export default Navbar;
