@@ -1,7 +1,5 @@
 import { Box, LinearProgress } from "@mui/material";
 
-import correctSound from '../../assets/sounds/correct-sound.mp3'
-
 const ProgressBar = (progress, maxProgress) => {
     return (
         <Box mb={4}>

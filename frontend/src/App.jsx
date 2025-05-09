@@ -1,13 +1,15 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './App.css'
 
+
 // PAGES
-import Register from './pages/Register';
 import Profile from './pages/Profile';
 import GameSelection from './pages/GameSelection';
+import Register from './pages/Register';
+import Login from './pages/Login';
 
 // GAMES
 import EmotionMatcher from './games/EmotionMatcher/EmotionMatcher';
@@ -27,21 +29,23 @@ const theme = createTheme({
 });
 
 
-
 function App() {
-
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Navbar />
-        {/* <EmotionMatcher /> */}
-        {/* <Register /> */}
-        <Profile />
+        {/* <Navbar /> */}
         {/* <GameSelection /> */}
-
-        {/* <PuzzleGame /> */}
-        {/* <KoalaBreathingGame /> */}
+        {/* <Profile /> */}
+        <Register />
+        <Router>
+          {/* <Navbar /> */}
+          <Routes>
+            {/* <Route path="/" element={<EmotionMatcher />} /> */}
+            {/* <Route path="/profile" element={<Profile />} /> */}
+            <Route path="/games" element={<GameSelection />} />
+          </Routes>
+        </Router>
       </ThemeProvider >
     </>
   )

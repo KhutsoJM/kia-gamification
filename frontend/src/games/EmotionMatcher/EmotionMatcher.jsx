@@ -148,12 +148,12 @@ const EmotionMatcher = () => {
                   position: 'relative',
                   padding: 2,
                   minHeight: 80,
-                  backgroundColor: matched[id] ? '#d0f0c0' : '#f9f9f9',
-                  border: '2px dashed #ccc',
+                  height: 115,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: '115px',
+                  backgroundColor: matched[id] ? '#d0f0c0' : '#f9f9f9',
+                  border: '2px dashed #ccc',
                   textAlign: 'center',
                   overflow: 'hidden',
                   zIndex: '-1',
@@ -161,11 +161,11 @@ const EmotionMatcher = () => {
               >
                 <Typography>{text}</Typography>
 
-                {matchFeedback === id && (
+                {/* {matchFeedback === id && (
                   <motion.div
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 0, scale: 3 }}
-                    transition={{ duration: 1 }}
+                    transition={{ duration: 0.75 }}
                     style={{
                       position: 'absolute',
                       // top: '50%',
@@ -178,7 +178,44 @@ const EmotionMatcher = () => {
                       pointerEvents: 'none'
                     }}
                   />
+                )} */}
+
+                {matchFeedback === id ? (
+                  <motion.div
+                    initial={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: 0, scale: 3 }}
+                    transition={{ duration: 0.75 }}
+                    style={{
+                      position: 'absolute',
+                      // top: '50%',
+                      // left: '50%',
+                      width: 100,
+                      height: 100,
+                      background: 'radial-gradient(circle, #6a994e, transparent)',
+                      borderRadius: '50%',
+                      // transform: 'translate(-50%, -50%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: 0, scale: 3 }}
+                    transition={{ duration: 0.75 }}
+                    style={{
+                      position: 'absolute',
+                      // top: '50%',
+                      // left: '50%',
+                      width: 100,
+                      height: 100,
+                      background: 'radial-gradient(circle,rgb(186, 78, 93), transparent)',
+                      borderRadius: '50%',
+                      // transform: 'translate(-50%, -50%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
                 )}
+
 
               </Paper>
             ))}

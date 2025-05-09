@@ -41,19 +41,57 @@ const Register = () => {
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2} p={2}>
                         <Grid size={6} mb={2}>
-                            <TextField variant="outlined" name="firstName" label="Name" fullWidth value={data.firstName} onChange={handleChange}/>
+                            <TextField
+                                variant="outlined"
+                                name="firstName"
+                                label="Name"
+                                fullWidth
+                                value={data.firstName}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid size={6} mb={2}>
-                            <TextField variant="outlined" name="lastName" label="Surname" fullWidth value={data.lastName} onChange={handleChange}/>
+                            <TextField
+                                variant="outlined"
+                                name="lastName"
+                                label="Surname"
+                                fullWidth
+                                value={data.lastName}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid mb={2} size={12}>
-                            <TextField variant="outlined" name="email" label="Email" fullWidth placeholder="example@email.com" value={data.email} onChange={handleChange}/>
+                            <TextField
+                                variant="outlined"
+                                name="email"
+                                label="Email"
+                                fullWidth
+                                placeholder="example@email.com"
+                                value={data.email}
+                                onChange={handleChange}
+                            />
                         </Grid>
                         <Grid mb={2} size={12}>
-                            <TextField variant="outlined" name="password" label="Password" fullWidth type="password" value={data.password} onChange={handleChange}/>
+                            <TextField
+                                variant="outlined"
+                                name="password"
+                                label="Password"
+                                fullWidth
+                                value={data.password}
+                                onChange={handleChange}
+                                type="password"
+                            />
                         </Grid>
                         <Grid mb={2} size={12}>
-                            <TextField variant="outlined" name="confirmPassword" label="Confirm Password" fullWidth value={data.confirmPassword} onChange={handleChange}/>
+                            <TextField
+                                variant="outlined"
+                                name="confirmPassword"
+                                label="Confirm Password"
+                                fullWidth
+                                value={data.confirmPassword}
+                                onChange={handleChange}
+                                type="password"
+                            />
                         </Grid>
                         <Grid mb={1} size={2}>
                             <Checkbox required />
