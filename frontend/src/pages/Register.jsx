@@ -27,7 +27,7 @@ const Register = () => {
     return (
         <Box p={4} sx={{
             display: "flex",
-            height: "80vh",
+            maxHeight: "90vh",
             justifyContent: "center",
             alignItems: "center",
         }}>
@@ -103,7 +103,7 @@ const Register = () => {
                             <Button variant="outlined" fullWidth type="submit">Register</Button>
                         </Grid>
                         <Grid size={12}>
-                            <Typography>Already have an account? <a href="">Login here</a></Typography>
+                            <Typography>Already have an account? <a href="/login">Login here</a></Typography>
                         </Grid>
                     </Grid>
                 </form>

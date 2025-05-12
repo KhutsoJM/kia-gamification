@@ -14,6 +14,10 @@ const emojis = [
   { id: 'sad', emoji: '😢' },
   { id: 'scared', emoji: '😱' },
   { id: 'sick', emoji: '😷' },
+  { id: 'confused', emoji: '🤔' },
+  { id: 'disappointed', emoji: '😞' },
+  { id: 'relieved', emoji: '😌' },
+  { id: 'surprised', emoji: '😲' },
 ];
 
 const scenarios = [
@@ -22,6 +26,10 @@ const scenarios = [
   { id: 'sad', text: 'You lost your pet' },
   { id: 'scared', text: 'You heard a loud noise at night' },
   { id: 'sick', text: 'You get cold and start sneezing at school' },
+  { id: 'confused', text: 'The instructions for a game make no sense to you.' },
+  { id: 'disappointed', text: "You studied hard for a test but didn't get the grade you hoped for." },
+  { id: 'relieved', text: 'You thought you lost your phone, but then you found it in your backpack.' },
+  { id: 'surprised', text: 'You get an unexpected gift from a friend' },
 ];
 
 
@@ -37,15 +45,30 @@ const EmotionMatcher = () => {
     return arr;
   }
 
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  }
+
+  const emojiChunks = chunkArray(shuffle(emojis), 5);
+  const scenarioChunks = chunkArray(shuffle(scenarios), 5)
+
+  // Emotion and Scenario cards States
   const [matched, setMatched] = useState({});
   const [shuffledEmojis] = useState(() => shuffle(emojis))
   const [shuffledScenarios] = useState(() => shuffle(scenarios))
-  const [selectedId, setSelectedId] = useState()
   const [score, setScore] = useState(0)
   const [matchFeedback, setMatchFeedback] = useState(null)
 
   const zoneRefs = useRef({});
   const soundsRef = useRef();
+
+  // Rounds
+  const [round, setRound] = useState(1)
+  
 
   useEffect(() => {
     soundsRef.current = {
@@ -92,16 +115,11 @@ const EmotionMatcher = () => {
     <Box p={4} sx={{
       userSelect: 'none'
     }}>
-      <Box mb={4}>
-        <ProgressBar
-          progress={score}
-          maxProgress={scenarios.length}
-        />
-      </Box>
+      <ProgressBar progress={score} maxProgress={scenarios.length} />
 
       <Grid container display="flex" justifyContent="center" spacing={4}>
         {/* Emoji Row */}
-        <Grid item xs={12}>
+        <Grid item xs={12} mr={14}>
           <Box display="flex" justifyContent="center" flexDirection="column" gap={4} flexWrap="wrap" marginRight="25px">
             {shuffledEmojis.map(({ id, emoji }) => (
               <motion.div
@@ -110,18 +128,17 @@ const EmotionMatcher = () => {
                 dragSnapToOrigin
                 whileDrag={{ scale: 1.1, rotate: 10 }} // Rotates 10 degrees while dragging
                 // draggable={!matched[id]}
-                onDragStart={() => setSelectedId(id)}
                 onDragEnd={(e, info) => handleDragEnd(e, info, id)}
               >
                 <Paper
                   sx={{
                     width: 300,
-                    height: 115,
+                    height: 90,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: 40,
-                    cursor: matched[id] ? 'default' : 'grab',
+                    // cursor: matched[id] ? 'default' : 'grab',
                     opacity: matched[id] ? 0.3 : 1,
                     boxShadow: '3',
                     '&:hover': {
@@ -148,7 +165,8 @@ const EmotionMatcher = () => {
                   position: 'relative',
                   padding: 2,
                   minHeight: 80,
-                  height: 115,
+                  height: 90,
+                  maxWidth: 350,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -161,7 +179,7 @@ const EmotionMatcher = () => {
               >
                 <Typography>{text}</Typography>
 
-                {/* {matchFeedback === id && (
+                {matchFeedback === id && (
                   <motion.div
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 0, scale: 3 }}
@@ -173,50 +191,12 @@ const EmotionMatcher = () => {
                       width: 100,
                       height: 100,
                       background: 'radial-gradient(circle, #6a994e, transparent)',
-                      borderRadius: '50%',
-                      // transform: 'translate(-50%, -50%)',
-                      pointerEvents: 'none'
-                    }}
-                  />
-                )} */}
-
-                {matchFeedback === id ? (
-                  <motion.div
-                    initial={{ opacity: 1, scale: 1 }}
-                    animate={{ opacity: 0, scale: 3 }}
-                    transition={{ duration: 0.75 }}
-                    style={{
-                      position: 'absolute',
-                      // top: '50%',
-                      // left: '50%',
-                      width: 100,
-                      height: 100,
-                      background: 'radial-gradient(circle, #6a994e, transparent)',
-                      borderRadius: '50%',
-                      // transform: 'translate(-50%, -50%)',
-                      pointerEvents: 'none'
-                    }}
-                  />
-                ) : (
-                  <motion.div
-                    initial={{ opacity: 1, scale: 1 }}
-                    animate={{ opacity: 0, scale: 3 }}
-                    transition={{ duration: 0.75 }}
-                    style={{
-                      position: 'absolute',
-                      // top: '50%',
-                      // left: '50%',
-                      width: 100,
-                      height: 100,
-                      background: 'radial-gradient(circle,rgb(186, 78, 93), transparent)',
                       borderRadius: '50%',
                       // transform: 'translate(-50%, -50%)',
                       pointerEvents: 'none'
                     }}
                   />
                 )}
-
-
               </Paper>
             ))}
           </Box>

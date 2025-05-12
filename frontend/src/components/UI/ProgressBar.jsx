@@ -1,6 +1,6 @@
 import { Box, LinearProgress } from "@mui/material";
 
-const ProgressBar = (progress, maxProgress) => {
+const ProgressBar = ({ progress, maxProgress }) => {
     return (
         <Box mb={4}>
             <LinearProgress

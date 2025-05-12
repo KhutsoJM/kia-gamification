@@ -4,6 +4,7 @@ body {
   padding: 2rem;
   text-align: center;
   background-repeat: none;
+  cursor: url('./assets/images/cursor-dot.png'), auto
 }
 
 img {

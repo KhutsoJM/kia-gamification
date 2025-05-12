@@ -34,16 +34,14 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {/* <Navbar /> */}
-        {/* <GameSelection /> */}
-        {/* <Profile /> */}
-        <Register />
         <Router>
-          {/* <Navbar /> */}
+          <Navbar />
           <Routes>
-            {/* <Route path="/" element={<EmotionMatcher />} /> */}
-            {/* <Route path="/profile" element={<Profile />} /> */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/games" element={<GameSelection />} />
+            <Route path="/emotion-matcher" element={<EmotionMatcher />} />
           </Routes>
         </Router>
       </ThemeProvider >
