@@ -9,40 +9,16 @@ import incorrectSound from '../../assets/sounds/incorrect-sound.wav';
 import completeSound from '../../assets/sounds/complete-sound.mp3';
 
 
-const emojis = [
-  { id: 'happy', emoji: '😊' },
-  { id: 'angry', emoji: '😡' },
-  { id: 'sad', emoji: '😢' },
-  { id: 'scared', emoji: '😱' },
-  { id: 'sick', emoji: '😷' },
-  { id: 'confused', emoji: '🤔' },
-  { id: 'disappointed', emoji: '😞' },
-  { id: 'relieved', emoji: '😌' },
-  { id: 'surprised', emoji: '😲' },
-];
-
-const scenarios = [
-  { id: 'happy', text: 'Your friend gave you a gift' },
-  { id: 'angry', text: 'Someone took your toy' },
-  { id: 'sad', text: 'You lost your pet' },
-  { id: 'scared', text: 'You heard a loud noise at night' },
-  { id: 'sick', text: 'You get cold and start sneezing at school' },
-  { id: 'confused', text: 'The instructions for a game make no sense to you.' },
-  { id: 'disappointed', text: "You studied hard for a test but didn't get the grade you hoped for." },
-  { id: 'relieved', text: 'You thought you lost your phone, but then you found it in your backpack.' },
-  { id: 'surprised', text: 'You get an unexpected gift from a friend' },
-];
-
 const pairsData = [
-  { id: 'happy', emoji: '😊', text: 'Your friend gave you a gift' },
-  { id: 'angry', emoji: '😡', text: 'Someone took your toy' },
-  { id: 'sad', emoji: '😢' },
-  { id: 'scared', emoji: '😱' },
-  { id: 'sick', emoji: '😷' },
-  { id: 'confused', emoji: '🤔' },
-  { id: 'disappointed', emoji: '😞' },
-  { id: 'relieved', emoji: '😌' },
-  { id: 'surprised', emoji: '😲' },
+  { id: 'happy', emoji: '😊', scenario: 'Your friend gave you a gift' },
+  { id: 'angry', emoji: '😡', scenario: 'Someone took your toy' },
+  { id: 'sad', emoji: '😢', scenario: 'You lost your pet' },
+  { id: 'scared', emoji: '😱', scenario: 'You heard a loud noise at night' },
+  { id: 'sick', emoji: '😷', scenario: 'You get cold and start sneezing at school' },
+  { id: 'confused', emoji: '🤔', scenario: 'The instructions for a game make no sense to you.' },
+  { id: 'disappointed', emoji: '😞', scenario: "You studied hard for a test but didn't get the grade you hoped for." },
+  { id: 'relieved', emoji: '😌', scenario: 'You thought you lost your phone, but then you found it in your backpack.' },
+  { id: 'surprised', emoji: '😲', scenario: 'You get an unexpected gift from a friend' },
 ]
 
 
@@ -69,9 +45,6 @@ const EmotionMatcher = () => {
 
   // Emotion and Scenario cards States
   const [matched, setMatched] = useState({});
-
-  const [shuffledEmojis] = useState(() => shuffle(emojis));
-  const [shuffledScenarios] = useState(() => shuffle(scenarios));
   const [score, setScore] = useState(0);
 
   const [correctMatchFeedback, setCorrectMatchFeedback] = useState(null);
@@ -81,8 +54,12 @@ const EmotionMatcher = () => {
   const soundsRef = useRef();
 
   // Rounds
-  const [round, setRound] = useState(1);
-  
+  const [rounds, setRounds] = useState(chunkArray((shuffle(pairsData)), 3)); // 3 items per round
+  const [currentRound, setCurrentRound] = useState(0);
+
+  const [shuffledEmojis, setShuffledEmojis] = useState([])
+  const [shuffledScenarios, setShuffledScenarios] = useState([])
+
 
   useEffect(() => {
     soundsRef.current = {
@@ -92,7 +69,16 @@ const EmotionMatcher = () => {
     }
 
     soundsRef.current.correct.volume = 0.5;
+    soundsRef.current.incorrect.volume = 0.5;
+    soundsRef.current.complete.volume = 0.5;
   }, [])
+
+  useEffect(() => {
+    if (rounds[currentRound]) {
+      setShuffledEmojis(() => shuffle(rounds[currentRound].map(({ id, emoji }) => ({ id, emoji }))))
+      setShuffledScenarios(() => shuffle(rounds[currentRound].map(({ id, scenario }) => ({ id, scenario }))))
+    }
+  }, [currentRound])
 
 
   const handleDragEnd = (event, info, id) => {
@@ -101,7 +87,7 @@ const EmotionMatcher = () => {
     const adjustedX = pointer.x;
     const adjustedY = pointer.y;
 
-    for (const zone of shuffledScenarios) {
+    for (const zone of rounds[currentRound]) {
       const zoneEl = zoneRefs.current[zone.id];
       if (!zoneEl || matched[zone.id]) continue;
 
@@ -118,9 +104,22 @@ const EmotionMatcher = () => {
           setScore((prev) => prev + 1);
 
           setCorrectMatchFeedback(zone.id);
-          score < scenarios.length - 1 ? soundsRef.current.correct.play() : soundsRef.current.complete.play();
-          soundsRef.current.correct.play();
+          score < pairsData.length - 1 && soundsRef.current.correct.play();
           setTimeout(() => setCorrectMatchFeedback(null), 1000);
+
+          // Check if round is over
+          const roundPairs = rounds[currentRound];
+          const completed = roundPairs.every((pair) => matched[pair.id] || pair.id === id);
+
+          if (completed) {
+            soundsRef.current.complete.play();
+
+            setTimeout(() => {
+              setMatched({});
+              setCurrentRound((prev) => prev + 1);
+            }, 1000);
+          }
+
         } else {
           setIncorrectMatchFeedback(zone.id);
           soundsRef.current.incorrect.play();
@@ -131,12 +130,20 @@ const EmotionMatcher = () => {
     }
   }
 
+  if (!rounds[currentRound]) {
+    return (
+      <Box p={4}>
+        <Typography variant='h4'>All rounds complete!</Typography>
+      </Box>
+    )
+  }
 
   return (
     <Box p={4} sx={{
       userSelect: 'none'
     }}>
-      <ProgressBar progress={score} maxProgress={scenarios.length} />
+      <Typography variant='h5'>Round: {currentRound + 1}</Typography>
+      <ProgressBar progress={score} maxProgress={pairsData.length} />
 
       <Grid container display="flex" justifyContent="center" spacing={4}>
         {/* Emoji Row */}
@@ -153,7 +160,7 @@ const EmotionMatcher = () => {
               >
                 <Paper
                   sx={{
-                    width: 300,
+                    minWidth: 300,
                     height: 90,
                     display: 'flex',
                     alignItems: 'center',
@@ -177,7 +184,7 @@ const EmotionMatcher = () => {
         {/* Scenario Drop Zones */}
         <Grid item xs={12}>
           <Box display="flex" flexDirection="column" gap={4}>
-            {shuffledScenarios.map(({ id, text }) => (
+            {shuffledScenarios.map(({ id, scenario }) => (
               <Paper
                 key={id}
                 elevation={2}
@@ -185,8 +192,9 @@ const EmotionMatcher = () => {
                 sx={{
                   position: 'relative',
                   padding: 2,
-                  minHeight: 80,
                   height: 90,
+                  minHeight: 80,
+                  minWidth: 350,
                   maxWidth: 350,
                   display: 'flex',
                   alignItems: 'center',
@@ -198,7 +206,7 @@ const EmotionMatcher = () => {
                   zIndex: '-1',
                 }}
               >
-                <Typography>{text}</Typography>
+                <Typography>{scenario}</Typography>
 
                 {correctMatchFeedback === id && (
                   <motion.div
@@ -237,7 +245,7 @@ const EmotionMatcher = () => {
                     }}
                   />
                 )}
-                
+
               </Paper>
             ))}
           </Box>
