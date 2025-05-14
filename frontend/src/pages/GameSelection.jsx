@@ -128,9 +128,10 @@ const GameSelection = ({ onSelectGame }) => {
             <Card sx={{
               width: "276px",
               height: "100%",
-              objectFit: "cover"
+              objectFit: "cover",
             }}>
               <CardActionArea sx={{ height: "100%" }} onClick={() => onSelectGame(game.id)}>
+
                 <CardMedia
                   component="img"
                   height="160"

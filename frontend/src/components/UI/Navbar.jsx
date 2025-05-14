@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Box, Drawer, IconButton, Container
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from 'react-router-dom'
+import { ForkRight, Gradient } from "@mui/icons-material";
 
 
 const Navbar = () => {
@@ -17,6 +18,7 @@ const Navbar = () => {
       width: "100%",
       top: 0,
       left: 0,
+      backgroundImage: "linear-gradient(to right, #1976d2, #1e88e5, #2196f3, #42a5f5, #64b5f6)",
     }}>
       <Toolbar>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ width: "100%" }}>

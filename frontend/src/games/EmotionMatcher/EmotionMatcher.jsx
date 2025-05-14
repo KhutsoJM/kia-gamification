@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import ProgressBar from '../../components/UI/ProgressBar';
 
 import correctSound from '../../assets/sounds/correct-sound.mp3';
+import incorrectSound from '../../assets/sounds/incorrect-sound.wav';
 import completeSound from '../../assets/sounds/complete-sound.mp3';
 
 
@@ -32,6 +33,18 @@ const scenarios = [
   { id: 'surprised', text: 'You get an unexpected gift from a friend' },
 ];
 
+const pairsData = [
+  { id: 'happy', emoji: '😊', text: 'Your friend gave you a gift' },
+  { id: 'angry', emoji: '😡', text: 'Someone took your toy' },
+  { id: 'sad', emoji: '😢' },
+  { id: 'scared', emoji: '😱' },
+  { id: 'sick', emoji: '😷' },
+  { id: 'confused', emoji: '🤔' },
+  { id: 'disappointed', emoji: '😞' },
+  { id: 'relieved', emoji: '😌' },
+  { id: 'surprised', emoji: '😲' },
+]
+
 
 
 const EmotionMatcher = () => {
@@ -53,26 +66,28 @@ const EmotionMatcher = () => {
     return chunks;
   }
 
-  const emojiChunks = chunkArray(shuffle(emojis), 5);
-  const scenarioChunks = chunkArray(shuffle(scenarios), 5)
 
   // Emotion and Scenario cards States
   const [matched, setMatched] = useState({});
-  const [shuffledEmojis] = useState(() => shuffle(emojis))
-  const [shuffledScenarios] = useState(() => shuffle(scenarios))
-  const [score, setScore] = useState(0)
-  const [matchFeedback, setMatchFeedback] = useState(null)
+
+  const [shuffledEmojis] = useState(() => shuffle(emojis));
+  const [shuffledScenarios] = useState(() => shuffle(scenarios));
+  const [score, setScore] = useState(0);
+
+  const [correctMatchFeedback, setCorrectMatchFeedback] = useState(null);
+  const [incorrectMatchFeedback, setIncorrectMatchFeedback] = useState(null);
 
   const zoneRefs = useRef({});
   const soundsRef = useRef();
 
   // Rounds
-  const [round, setRound] = useState(1)
+  const [round, setRound] = useState(1);
   
 
   useEffect(() => {
     soundsRef.current = {
       correct: new Audio(correctSound),
+      incorrect: new Audio(incorrectSound),
       complete: new Audio(completeSound),
     }
 
@@ -97,14 +112,20 @@ const EmotionMatcher = () => {
         adjustedY >= rect.top + window.scrollY &&
         adjustedY <= rect.bottom + window.scrollY;
 
-      if (inZone && zone.id === id) {
-        setMatched((prev) => ({ ...prev, [zone.id]: true }));
-        setScore((prev) => prev + 1);
+      if (inZone) {
+        if (zone.id === id) {
+          setMatched((prev) => ({ ...prev, [zone.id]: true }));
+          setScore((prev) => prev + 1);
 
-        score < scenarios.length - 1 ? soundsRef.current.correct.play() : soundsRef.current.complete.play()
-        soundsRef.current.correct.play()
-        setMatchFeedback(zone.id);
-        setTimeout(() => setMatchFeedback(null), 1000);
+          setCorrectMatchFeedback(zone.id);
+          score < scenarios.length - 1 ? soundsRef.current.correct.play() : soundsRef.current.complete.play();
+          soundsRef.current.correct.play();
+          setTimeout(() => setCorrectMatchFeedback(null), 1000);
+        } else {
+          setIncorrectMatchFeedback(zone.id);
+          soundsRef.current.incorrect.play();
+          setTimeout(() => setIncorrectMatchFeedback(null), 1000);
+        }
         break;
       }
     }
@@ -179,7 +200,7 @@ const EmotionMatcher = () => {
               >
                 <Typography>{text}</Typography>
 
-                {matchFeedback === id && (
+                {correctMatchFeedback === id && (
                   <motion.div
                     initial={{ opacity: 1, scale: 1 }}
                     animate={{ opacity: 0, scale: 3 }}
@@ -197,6 +218,26 @@ const EmotionMatcher = () => {
                     }}
                   />
                 )}
+
+                {incorrectMatchFeedback === id && (
+                  <motion.div
+                    initial={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: 0, scale: 3 }}
+                    transition={{ duration: 0.75 }}
+                    style={{
+                      position: 'absolute',
+                      // top: '50%',
+                      // left: '50%',
+                      width: 100,
+                      height: 100,
+                      background: 'radial-gradient(circle,rgb(237, 66, 66), transparent)',
+                      borderRadius: '50%',
+                      // transform: 'translate(-50%, -50%)',
+                      pointerEvents: 'none'
+                    }}
+                  />
+                )}
+                
               </Paper>
             ))}
           </Box>
