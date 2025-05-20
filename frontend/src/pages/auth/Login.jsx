@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { useState } from "react"
 import {
-    Box, 
-    Paper, 
-    TextField, 
-    Grid, 
-    Typography, 
-    Button, 
-    Divider, 
+    Box,
+    Paper,
+    TextField,
+    Grid,
+    Typography,
+    Button,
+    Divider,
     FormControl,
     OutlinedInput,
     InputLabel,
@@ -16,8 +16,12 @@ import {
 } from "@mui/material"
 import { VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material'
 
+import { useNavigate } from 'react-router-dom'
+
 
 const Login = () => {
+    const navigate = useNavigate()
+
     // STATE
     const [data, setData] = useState({
         firstName: '',
@@ -44,7 +48,13 @@ const Login = () => {
             password: data.password,
         });
 
-        console.log(`Response: ${JSON.stringify(response.data)}`)
+        console.log(response.data.success)
+
+        if (response.data.success) {
+            navigate('/thanks')
+        } else {
+            console.log('login failed')
+        }
     }
 
     const handleClickPasswordIcon = () => {

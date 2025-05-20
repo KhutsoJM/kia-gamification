@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import GameSelection from './pages/GameSelection';
 import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
+import RegisterThankYou from './pages/auth/RegisterThankYou';
 
 // GAMES
 import EmotionMatcher from './games/EmotionMatcher/EmotionMatcher';
@@ -40,6 +41,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/thanks" element={<RegisterThankYou />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/games" element={<GameSelection />} />
             <Route path="/emotion-matcher" element={<EmotionMatcher />} />
