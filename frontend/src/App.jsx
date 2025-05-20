@@ -8,8 +8,8 @@ import './App.css'
 // PAGES
 import Profile from './pages/Profile';
 import GameSelection from './pages/GameSelection';
-import Register from './pages/Register';
-import Login from './pages/Login';
+import Register from './pages/auth/Register';
+import Login from './pages/auth/Login';
 
 // GAMES
 import EmotionMatcher from './games/EmotionMatcher/EmotionMatcher';
