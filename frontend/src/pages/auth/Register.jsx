@@ -1,5 +1,20 @@
+import axios from "axios"
 import { useState } from "react"
-import { Box, Paper, TextField, Grid, Typography, Button, Checkbox } from "@mui/material"
+import {
+    Box,
+    Paper,
+    TextField,
+    Grid,
+    Typography,
+    Button,
+    Checkbox,
+    FormControl,
+    OutlinedInput,
+    InputLabel,
+    InputAdornment,
+    IconButton,
+} from "@mui/material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 
 const Register = () => {
@@ -12,6 +27,8 @@ const Register = () => {
         confirmPassword: '',
     })
 
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
     // FUNCTIONS
     const handleChange = (e) => {
         const input = e.target.name
@@ -20,8 +37,21 @@ const Register = () => {
         setData(prevData => ({ ...prevData, [input]: value }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        // ADD FEATURE: Check if 'confirm password is correct'
+        e.preventDefault()
+        const response = await axios.post('http://localhost:3000/register', {
+            first: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password,
+        });
 
+        console.log(`Response: ${JSON.stringify(response.data)}`)
+    }
+
+    const handleClickPasswordIcon = () => {
+        setIsPasswordVisible(isVisible => !isVisible)
     }
 
     return (
@@ -38,7 +68,7 @@ const Register = () => {
             }}>
 
                 <Typography variant="h5" gutterBottom>Create Your Account</Typography>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="off">
                     <Grid container spacing={2} p={2}>
                         <Grid size={6} mb={2}>
                             <TextField
@@ -72,7 +102,30 @@ const Register = () => {
                             />
                         </Grid>
                         <Grid mb={2} size={12}>
-                            <TextField
+                            <FormControl variant="outlined" fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <OutlinedInput
+                                    id="password"
+                                    type={isPasswordVisible ? "text" : "password"}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label={
+                                                    isPasswordVisible ? "hide the password" : "display the password"
+                                                }
+                                                onClick={handleClickPasswordIcon}
+                                                edge="end"
+                                            >
+                                                {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password"
+                                />
+                            </FormControl>
+
+                            {/* Old Password Input */}
+                            {/* <TextField
                                 variant="outlined"
                                 name="password"
                                 label="Password"
@@ -80,7 +133,7 @@ const Register = () => {
                                 value={data.password}
                                 onChange={handleChange}
                                 type="password"
-                            />
+                            /> */}
                         </Grid>
                         <Grid mb={2} size={12}>
                             <TextField
