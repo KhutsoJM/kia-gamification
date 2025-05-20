@@ -14,7 +14,7 @@ import {
     InputAdornment,
     IconButton,
 } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material"
 
 
 const Register = () => {
@@ -40,8 +40,8 @@ const Register = () => {
     const handleSubmit = async (e) => {
         // ADD FEATURE: Check if 'confirm password is correct'
         e.preventDefault()
-        const response = await axios.post('http://localhost:3000/register', {
-            first: data.firstName,
+        const response = await axios.post('http://localhost:3000/users/auth/register', {
+            firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
             password: data.password,
@@ -105,8 +105,11 @@ const Register = () => {
                             <FormControl variant="outlined" fullWidth>
                                 <InputLabel htmlFor="password">Password</InputLabel>
                                 <OutlinedInput
+                                    name="password"
                                     id="password"
                                     type={isPasswordVisible ? "text" : "password"}
+                                    value={data.password}
+                                    onChange={handleChange}
                                     endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton
@@ -116,24 +119,13 @@ const Register = () => {
                                                 onClick={handleClickPasswordIcon}
                                                 edge="end"
                                             >
-                                                {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+                                                {isPasswordVisible ? <VisibilityOffOutlined /> : <VisibilityOutlined />}
                                             </IconButton>
                                         </InputAdornment>
                                     }
                                     label="Password"
                                 />
                             </FormControl>
-
-                            {/* Old Password Input */}
-                            {/* <TextField
-                                variant="outlined"
-                                name="password"
-                                label="Password"
-                                fullWidth
-                                value={data.password}
-                                onChange={handleChange}
-                                type="password"
-                            /> */}
                         </Grid>
                         <Grid mb={2} size={12}>
                             <TextField

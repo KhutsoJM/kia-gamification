@@ -2,6 +2,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from 'cors';
+import dotenv from "dotenv";
+
+// ROUTERS
+import authRoutes from "./routes/auth.js";
 
 const app = express()
 
@@ -9,15 +13,18 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const PORT = 3000
+dotenv.config()
+const PORT = process.env.PORT
+const MONGO_URI = process.env.MONGO_URI
 
 
-app.post('/register', (req, res) => {
-    console.log(`User Registered: ${req.body}`)
-    return res.json({ success: true, 'userDetails': req.body })
-})
+// Routes
+app.use('/users/auth', authRoutes)
 
 
 app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
+    mongoose.connect(MONGO_URI)
+        .then(() => console.log('conncected to the database'))
+        .catch((e) => console.log(`ERROR: ${MONGO_URI}`))
 })
