@@ -1,5 +1,5 @@
 import { Box, Typography, Paper, Stack } from '@mui/material';
-import confetti from '../assets/animations/confetti.gif';
+import partyPopper from '../assets/animations/party-popper.gif';
 
 const CompletionScreen = ({ score, total, timeTaken }) => {
 
@@ -19,7 +19,7 @@ const CompletionScreen = ({ score, total, timeTaken }) => {
             }}
         >
             <Typography variant="h3" gutterBottom style={{ width: '100%' }} display="flex" justifyContent="center" alignItems="center">
-                <img src={confetti} alt="" style={{ width: '100%', maxWidth: '150px', paddingBottom: "55px", overflow: "visible" }} /> Well Done! <img src={confetti} alt="" style={{ width: '100%', maxWidth: '150px', paddingBottom: "55px", overflow: "visible", transform: "scaleX(-1)" }} />
+                <img src={partyPopper} alt="" style={{ width: '100%', maxWidth: '150px', paddingBottom: "55px", overflow: "visible" }} /> Well Done! <img src={partyPopper} alt="" style={{ width: '100%', maxWidth: '150px', paddingBottom: "55px", overflow: "visible", transform: "scaleX(-1)" }} />
             </Typography>
 
             <Stack direction="row" spacing={3} mt={4} width="100%" display="flex" justifyContent="center">

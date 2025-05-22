@@ -172,6 +172,7 @@ const EmotionMatcher = () => {
   }
 
 
+  // Completion screen
   if (!rounds[currentRound]) {
     const timeTaken = endTime - startTime;
 
@@ -181,7 +182,7 @@ const EmotionMatcher = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: roundTransitioning ? 0 : 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.35 }}
+        transition={{ duration: 0.5 }}
       >
         <CompletionScreen score={score} total={pairsData.length} timeTaken={timeTaken} />
       </motion.div>
@@ -189,6 +190,7 @@ const EmotionMatcher = () => {
   }
 
 
+  // Round transition messages
   if (roundTransitioning && transitionMessage) {
     return (
       <Box
