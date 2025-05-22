@@ -26,5 +26,5 @@ app.listen(PORT, () => {
     console.log(`listening on port ${PORT}`)
     mongoose.connect(MONGO_URI)
         .then(() => console.log('conncected to the database'))
-        .catch((e) => console.log(`ERROR: ${MONGO_URI}`))
+        .catch((e) => console.log(`ERROR connecting to database: ${e.message}`))
 })
