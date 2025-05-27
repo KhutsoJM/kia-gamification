@@ -21,6 +21,7 @@ import NumberSafari from './games/NumberSafari/NumberSafari';
 
 // UI
 import Navbar from './components/UI/Navbar';
+import PageLayout from './components/PageLayout';
 
 
 const theme = createTheme({
@@ -37,15 +38,18 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          <Navbar />
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/thanks" element={<RegisterThankYou />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/games" element={<GameSelection />} />
-            <Route path="/emotion-matcher" element={<EmotionMatcher />} />
-            <Route path="/number-safari" element={<NumberSafari />} />
+            <Route element={<PageLayout hasNavbar />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/thanks" element={<RegisterThankYou />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/games" element={<GameSelection />} />
+            </Route>
+            <Route element={<PageLayout hasNavbar={false} />}>
+              <Route path="/emotion-matcher" element={<EmotionMatcher />} />
+              <Route path="/number-safari" element={<NumberSafari />} />
+            </Route>
           </Routes>
         </Router>
       </ThemeProvider >

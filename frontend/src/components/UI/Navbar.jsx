@@ -4,6 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from 'react-router-dom'
 import { ForkRight, Gradient } from "@mui/icons-material";
+import './navbar.css'
 
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="absolute" color="primary" sx={{
+    <AppBar className="appbar" position="absolute" color="primary" sx={{
       width: "100%",
       top: 0,
       left: 0,
