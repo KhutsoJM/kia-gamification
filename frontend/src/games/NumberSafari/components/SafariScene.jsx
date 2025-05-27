@@ -1,13 +1,23 @@
-import safariBg from '../../../assets/numberSafari/environment/background/safari-background.jpg'
-import shrub from '../../../assets/numberSafari/environment/trees/shrub-1.png'
-import giraffe from '../../../assets/numberSafari/animals/Round/giraffe.png'
-import basket from '../../../assets/numberSafari/wooden-bucket.png'
-import raspberry from '../../../assets/numberSafari/fruits/normal/raspberry.png'
-
 import { Box } from '@mui/material'
 import { motion } from 'framer-motion'
 
-const SafariScene = () => {
+
+// ASSETS
+// environment
+import safariBg from '../../../assets/numberSafari/environment/background/safari-background.jpg'
+import shrub from '../../../assets/numberSafari/environment/trees/shrub-1.png'
+
+import basket from '../../../assets/numberSafari/wooden-bucket.png'
+
+// animals
+import giraffe from '../../../assets/numberSafari/animals/Round/giraffe.png'
+
+// fruits
+import raspberry from '../../../assets/numberSafari/fruits/normal/raspberry.png'
+
+
+
+const SafariScene = ({ children }) => {
     return (
         <Box sx={{
             position: 'relative',
@@ -24,14 +34,15 @@ const SafariScene = () => {
             {/* Intro Shrubs */}
             <motion.img
                 src={shrub}
-                alt=""
+                alt="Shrub"
                 style={{
                     filter: 'brightness(0) saturate(100%)',
                     position: 'absolute',
                     bottom: '-20px',
                     left: '-100px',
                     width: '500px',
-                    height: 'auto'
+                    height: 'auto',
+                    zIndex: "100"
                 }}
 
                 initial={{ x: 0 }}
@@ -41,7 +52,7 @@ const SafariScene = () => {
             />
             <motion.img
                 src={shrub}
-                alt=""
+                alt="Shrub"
                 style={{
                     filter: 'brightness(0) saturate(100%)',
                     position: 'absolute',
@@ -50,6 +61,7 @@ const SafariScene = () => {
                     width: '500px',
                     height: 'auto',
                     transform: "scaleX(-1)",
+                    zIndex: "100"
                 }}
 
                 initial={{ x: 0 }}
@@ -71,8 +83,8 @@ const SafariScene = () => {
 
             {/* Speech bubble */}
             <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
+                initial={{ scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
                 transition={{ delay: 3.5, duration: 0.5 }}
                 style={{
                     position: 'absolute',
@@ -89,7 +101,7 @@ const SafariScene = () => {
                     Can I have 3 <img src={raspberry} alt='Raspberry' style={{ width: '32px' }} />, please?
                 </p>
             </motion.div>
-
+            {children}
         </Box>
     )
 }

@@ -236,9 +236,6 @@ const EmotionMatcher = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Box height="32px" position="absolute" right="" top="">
-        <img src={heart} alt="Heart" />
-      </Box>
 
       <Box p={4} sx={{
         userSelect: 'none',
