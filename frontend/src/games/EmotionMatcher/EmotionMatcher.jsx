@@ -1,15 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Grid, Paper, LinearProgress } from '@mui/material';
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-import ProgressBar from '../../components/UI/ProgressBar';
+import './EmotionMatcher.css'
 
+import heart from '../../assets/images/heart-1.png';
+
+// SFX
 import correctSound from '../../assets/sounds/correct-sound.mp3';
 import incorrectSound from '../../assets/sounds/incorrect-sound.wav';
 import completeSound from '../../assets/sounds/complete-sound.mp3';
 import wellDoneSound from '../../assets/sounds/well-done.mp3';
 
+// COMPONENTS
 import CompletionScreen from '../../pages/CompletionScreen';
+import ProgressBar from '../../components/UI/ProgressBar';
 
 
 const pairsData = [
@@ -222,6 +227,7 @@ const EmotionMatcher = () => {
   }
 
 
+  // MAIN GAME AREA
   return (
     <motion.div
       key={currentRound}
@@ -230,13 +236,34 @@ const EmotionMatcher = () => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Box p={4} sx={{
-        userSelect: 'none'
-      }}>
-        <Typography variant='h5'>Round: {currentRound + 1}</Typography>
-        <ProgressBar progress={score} maxProgress={pairsData.length} />
+      <Box height="32px" position="absolute" right="" top="">
+        <img src={heart} alt="Heart" />
+      </Box>
 
-        <Grid container display="flex" justifyContent="center" spacing={4}>
+      <Box p={4} sx={{
+        userSelect: 'none',
+        paddingInline: 38,
+        display: "flex",
+        flexDirection: "column",
+        // alignItems: "center",
+        // justifyContent: "center",
+        height: "100vh",
+      }}>
+        <Box paddingBlock="3rem">
+          <Typography variant='h5'>Round: {currentRound + 1}</Typography>
+          <ProgressBar progress={score} maxProgress={pairsData.length} />
+        </Box>
+
+        <Grid
+          container
+          display="flex"
+          justifyContent="center"
+          spacing={4}
+          alignItems="center"
+          // border="1px solid black"
+          paddingBlock="2rem"
+        >
+
           {/* Emoji Row */}
           <Grid item xs={12} mr={14}>
             <Box display="flex" justifyContent="center" flexDirection="column" gap={4} flexWrap="wrap" marginRight="25px">
