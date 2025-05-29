@@ -1,4 +1,3 @@
-import { useDrop } from "react-dnd"
 
 const Basket = () => {
 

@@ -85,7 +85,7 @@ const SafariScene = ({ children }) => {
             <motion.div
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 3.5, duration: 0.5 }}
+                transition={{ delay: 6.4, duration: 0.5 }}
                 style={{
                     position: 'absolute',
                     bottom: '25%',

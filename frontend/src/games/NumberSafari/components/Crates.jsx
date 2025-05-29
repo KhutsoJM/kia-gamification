@@ -1,14 +1,15 @@
 import { Box, IconButton } from "@mui/material"
 import { Add, Remove } from "@mui/icons-material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from 'framer-motion'
 
 
 
-const Crate = ({ fruit, crate, fruitName }) => {
+const Crate = ({ fruitSrc, crateSrc, fruitName }) => {
 
     const [fruitCount, setFruitCount] = useState(0);
+
 
     const updateFruitCount = (change) => {
         change === "increase" ?
@@ -28,10 +29,10 @@ const Crate = ({ fruit, crate, fruitName }) => {
                 position: "relative",
                 width: "128px",
             }}>
-                {/* Crate image */}
+                {/* Crate */}
                 <Box
                     component="img"
-                    src={crate}
+                    src={crateSrc}
                     alt="Crate"
                     sx={{
                         width: "100%",
@@ -40,10 +41,10 @@ const Crate = ({ fruit, crate, fruitName }) => {
                     }}
                 />
 
-                {/* Fruit image */}
+                {/* Fruit icon */}
                 <Box
                     component="img"
-                    src={fruit}
+                    src={fruitSrc}
                     alt={fruitName}
                     sx={{
                         position: "absolute",
@@ -54,25 +55,6 @@ const Crate = ({ fruit, crate, fruitName }) => {
                         cursor: "pointer",
                     }}
                 />
-                {/* Drag */}
-                {fruitCount > 0 && (
-                    <motion.img
-                        drag
-                        dragSnapToOrigin
-                        // dragConstraints={{ top: -200, bottom: 200, left: -200, right: 200 }}
-                        src={fruit}
-                        alt={fruitName}
-                        style={{
-                            position: "absolute",
-                            top: "60%",
-                            left: "50%",
-                            width: "64px",
-                            transform: "translate(-50%, -50%)",
-                            cursor: "grab",
-                            zIndex: 10
-                        }}
-                    />
-                )}
 
                 {/* Fruit count */}
                 <Box

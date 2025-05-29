@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material"
 
-const Fruit = ({ fruit, fruitCount }) => {
+const Fruit = ({ fruitSrc, fruitCount }) => {
     return (
         <Box
             component="img"
-            src={fruit}
+            src={fruitSrc}
+            alt="Fruit"
             sx={{
                 position: "relative"
             }}
@@ -15,3 +16,5 @@ const Fruit = ({ fruit, fruitCount }) => {
         </Box>
     )
 }
+
+export default Fruit
