@@ -48,7 +48,6 @@ const SafariScene = ({ children }) => {
                 initial={{ x: 0 }}
                 animate={{ x: '-100%' }}
                 transition={{ delay: 1.5, duration: 1 }}
-            // style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 5 }}
             />
             <motion.img
                 src={shrub}
@@ -67,11 +66,10 @@ const SafariScene = ({ children }) => {
                 initial={{ x: 0 }}
                 animate={{ x: '100%' }}
                 transition={{ delay: 1.3, duration: 1 }}
-            // style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 5 }}
             />
 
             {/* First animal */}
-            <motion.div
+            {/* <motion.div
                 initial={{ x: -200, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 2.5, duration: 1, type: 'spring', bounce: 0.4 }}
@@ -79,28 +77,28 @@ const SafariScene = ({ children }) => {
             >
                 <img src={giraffe} style={{ height: '100px', }} />
                 <img src={basket} style={{ height: '90px', }} />
-            </motion.div>
+            </motion.div> */}
 
             {/* Speech bubble */}
-            <motion.div
-                initial={{ scale: 0, rotate: -20 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 6.4, duration: 0.5 }}
-                style={{
-                    position: 'absolute',
-                    bottom: '25%',
-                    left: '15%',
-                    background: 'white',
-                    borderRadius: '16px',
-                    padding: '8px 20px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                    zIndex: 10,
-                }}
-            >
-                <p>
-                    Can I have 3 <img src={raspberry} alt='Raspberry' style={{ width: '32px' }} />, please?
-                </p>
-            </motion.div>
+                {/* <motion.div
+                    initial={{ scale: 0, rotate: -20 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 6.4, duration: 0.5 }}
+                    style={{
+                        position: 'absolute',
+                        bottom: '25%',
+                        left: '15%',
+                        background: 'white',
+                        borderRadius: '16px',
+                        padding: '8px 20px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                        zIndex: 10,
+                    }}
+                >
+                    <p>
+                        Can I have 3 <img src={raspberry} alt='Raspberry' style={{ width: '32px' }} />, please?
+                    </p>
+                </motion.div> */}
             {children}
         </Box>
     )

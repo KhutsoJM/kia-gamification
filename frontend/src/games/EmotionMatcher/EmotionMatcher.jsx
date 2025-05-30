@@ -21,12 +21,12 @@ const pairsData = [
   { id: 'happy', emoji: '😊', scenario: 'Your friend gave you a gift' },
   { id: 'angry', emoji: '😡', scenario: 'Someone took your toy' },
   { id: 'sad', emoji: '😢', scenario: 'You lost your pet' },
-  // { id: 'scared', emoji: '😱', scenario: 'You heard a loud noise at night' },
-  // { id: 'sick', emoji: '😷', scenario: 'You get cold and start sneezing at school' },
-  // { id: 'confused', emoji: '🤔', scenario: 'The instructions for a game make no sense to you.' },
-  // { id: 'disappointed', emoji: '😞', scenario: "You studied hard for a test but didn't get the grade you hoped for." },
-  // { id: 'relieved', emoji: '😌', scenario: 'You thought you lost your phone, but then you found it in your backpack.' },
-  // { id: 'surprised', emoji: '😲', scenario: 'You get an unexpected gift from a friend' },
+  { id: 'scared', emoji: '😱', scenario: 'You heard a loud noise at night' },
+  { id: 'sick', emoji: '😷', scenario: 'You get cold and start sneezing at school' },
+  { id: 'confused', emoji: '🤔', scenario: 'The instructions for a game make no sense to you.' },
+  { id: 'disappointed', emoji: '😞', scenario: "You studied hard for a test but didn't get the grade you hoped for." },
+  { id: 'relieved', emoji: '😌', scenario: 'You thought you lost your phone, but then you found it in your backpack.' },
+  { id: 'surprised', emoji: '😲', scenario: 'You get an unexpected gift from a friend' },
 ]
 
 

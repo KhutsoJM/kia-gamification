@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { DndContext, closestCenter, PointerSensor, useSensors, useSensor } from '@dnd-kit/core';
+import { AnimatePresence, motion } from 'framer-motion'
+import { DndContext, closestCenter, PointerSensor, useSensors, useSensor } from '@dnd-kit/core'
 
 import { useState } from 'react'
 
@@ -12,6 +12,8 @@ import { Box } from '@mui/material'
 import SafariScene from './components/SafariScene'
 import Crate from './components/Crates'
 import Fruit from './components/Fruit'
+import AnimalRequest from './components/AnimalRequest'
+import CrateRow from './components/CrateRow'
 
 
 // ASSETS
@@ -36,10 +38,10 @@ import raspberry from '../../assets/numberSafari/fruits/normal/raspberry.png'
 import watermelon from '../../assets/numberSafari/fruits/normal/watermelon.png'
 
 // crates
-import crateBlue from '../../assets/numberSafari/crates/crate-blue.png';
-import crateYellow from '../../assets/numberSafari/crates/crate-yellow.png';
-import cratePink from '../../assets/numberSafari/crates/crate-pink.png';
-import crateGreen from '../../assets/numberSafari/crates/crate-green.png';
+import crateBlue from '../../assets/numberSafari/crates/crate-blue.png'
+import crateYellow from '../../assets/numberSafari/crates/crate-yellow.png'
+import cratePink from '../../assets/numberSafari/crates/crate-pink.png'
+import crateGreen from '../../assets/numberSafari/crates/crate-green.png'
 import { spring } from 'framer-motion'
 
 
@@ -82,33 +84,32 @@ const crates = [{
 
 
 const NumberSafari = () => {
-  const [counts, setCounts] = useState({ raspberry: 3, apple: 2, orange: 1 });
-  const [collected, setCollected] = useState({ raspberry: 0, apple: 0, orange: 0 });
+  const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
+  const currentRequest = requests[currentRequestIndex];
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
-  );
-
-  const handleDragEnd = (e) => {
-    const { active, over } = e;
-
-    if (over && over.id === active.data.current.fruit) {
-      // successful drop
-      setCounts(c => ({ ...c, [active.data.current.fruit]: c[active.data.current.fruit] - 1 }))
-      setCollected(c => ({ ...c, [active.data.current.fruit]: c[active.data.current.fruit] + 1 }))
+  
+  const handleCorrectDrop = () => {
+    if (currentRequestIndex < requests.length - 1) {
+      setCurrentRequestIndex(index => index + 1)
+    } else {
+      console.log("Game Over!");
     }
-    // else: automatically resets position
   }
 
+
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <div>
-        <SafariScene>
-          <Box sx={{
+    <div>
+      <SafariScene>
+        <AnimalRequest
+          animaltype={currentRequest.animalType}
+          fruitImg={currentRequest.fruitImg}
+          fruitType={currentRequest.fruitType}
+          animalSrc={currentRequest.animalImg}
+          amount={currentRequest.amount}
+          onCorrectDrop={handleCorrectDrop}
+        />
+        <CrateRow targetFruitType={currentRequest.fruitType} />
+        {/* <Box sx={{
             position: "relative",
             width: "100vw",
             height: "100vh",
@@ -142,10 +143,9 @@ const NumberSafari = () => {
                 </motion.div>
               ))}
             </Box>
-          </Box>
-        </SafariScene>
-      </div>
-    </DndContext>
+          </Box> */}
+      </SafariScene>
+    </div>
   )
 }
 
