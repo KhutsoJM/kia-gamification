@@ -45,11 +45,13 @@ function App() {
               <Route path="/thanks" element={<RegisterThankYou />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/games" element={<GameSelection />} />
-            </Route>
-            <Route element={<PageLayout hasNavbar={false} />}>
               <Route path="/emotion-matcher" element={<EmotionMatcher />} />
               <Route path="/number-safari" element={<NumberSafari />} />
             </Route>
+
+            {/* PAGES WITHOUT NAVBARS */}
+            {/* <Route element={<PageLayout hasNavbar={false} />}>
+            </Route> */}
           </Routes>
         </Router>
       </ThemeProvider >

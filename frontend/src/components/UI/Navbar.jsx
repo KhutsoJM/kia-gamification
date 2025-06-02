@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from 'react-router-dom'
 import { ForkRight, Gradient } from "@mui/icons-material";
-import './navbar.css'
+import './Navbar.css'
 
 
 const Navbar = () => {
@@ -45,6 +45,8 @@ const Navbar = () => {
             <Button component={Link} color="inherit" to="/profile">Profile</Button>
             <Button component={Link} color="inherit" to="/login">Login</Button>
             <Button component={Link} color="inherit" to="/register">Register</Button>
+            <Button component={Link} color="inherit" to="/emotion-matcher">Emotion Matcher</Button>
+            <Button component={Link} color="inherit" to="/number-safari">Number Safari</Button>
           </Box>
         </Box>
       </Toolbar>
