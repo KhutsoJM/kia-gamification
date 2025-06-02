@@ -40,7 +40,7 @@ function App() {
         <Router>
           <Routes>
             <Route element={<PageLayout hasNavbar />}>
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/thanks" element={<RegisterThankYou />} />
               <Route path="/profile" element={<Profile />} />
