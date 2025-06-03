@@ -1,15 +1,24 @@
+import { useEffect, useState } from "react";
+import { motion, scale } from 'framer-motion';
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+
 import { Box, IconButton } from "@mui/material"
 import { Add, Remove } from "@mui/icons-material";
 
-import { useEffect, useState } from "react";
-import { motion } from 'framer-motion'
 
-
-
-const Crate = ({ fruitSrc, crateSrc, fruitName }) => {
+const Crate = ({ fruitSrc, crateSrc, fruitType }) => {
 
     const [fruitCount, setFruitCount] = useState(0);
+    // const [localTransform, setLocalTransform] = useState(null);
 
+
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+        id: fruitType,
+        data: { fruitType },
+    });
+
+    // console.log(`Crate fruitType: ${fruitType}`);
 
     const updateFruitCount = (change) => {
         change === "increase" ?
@@ -22,12 +31,15 @@ const Crate = ({ fruitSrc, crateSrc, fruitName }) => {
             display="flex"
             alignItems="center"
         >
+
+            {/* Remove icon */}
             <IconButton sx={{ color: "black", marginTop: "28px" }} onClick={() => updateFruitCount("decrease")}>
                 <Remove />
             </IconButton>
             <Box sx={{
                 position: "relative",
                 width: "128px",
+                display: 'block'
             }}>
                 {/* Crate */}
                 <Box
@@ -42,17 +54,23 @@ const Crate = ({ fruitSrc, crateSrc, fruitName }) => {
                 />
 
                 {/* Fruit icon */}
-                <Box
-                    component="img"
+                <motion.img
+                    ref={setNodeRef}
+                    {...listeners}
+                    {...attributes}
                     src={fruitSrc}
-                    alt={fruitName}
-                    sx={{
+                    alt={fruitType}
+                    // animate={isDragging ? { scale: 1.25 } : { scale: 1 }}
+                    style={{
                         position: "absolute",
-                        top: "60%",
-                        left: "50%",
-                        width: "48px",
-                        transform: "translate(-50%, -50%)",
-                        cursor: "pointer",
+                        top: "45%",
+                        left: "40%",
+                        width: "32px",
+                        height: "32px",
+                        // transform: `${CSS.Translate.toString(transform)}`,
+                        transform: localTransform ? CSS.Translate.toString(localTransform) : "none",
+                        opacity: isDragging ? 0.8 : 1,
+                        transition: "transform 0.05s ease",
                     }}
                 />
 
@@ -79,10 +97,12 @@ const Crate = ({ fruitSrc, crateSrc, fruitName }) => {
                     {fruitCount}
                 </Box>
             </Box>
+
+            {/* Add icon */}
             <IconButton sx={{ color: "black", marginTop: "28px" }} onClick={() => updateFruitCount("increase")}>
                 <Add />
             </IconButton>
-        </Box>
+        </Box >
     )
 }
 

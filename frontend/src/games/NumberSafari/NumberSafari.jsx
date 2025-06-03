@@ -10,8 +10,6 @@ import { Box } from '@mui/material'
 
 // COMPONENTS
 import SafariScene from './components/SafariScene'
-import Crate from './components/Crates'
-import Fruit from './components/Fruit'
 import AnimalRequest from './components/AnimalRequest'
 import CrateRow from './components/CrateRow'
 
@@ -38,11 +36,7 @@ import raspberry from '../../assets/numberSafari/fruits/normal/raspberry.png'
 import watermelon from '../../assets/numberSafari/fruits/normal/watermelon.png'
 
 // crates
-import crateBlue from '../../assets/numberSafari/crates/crate-blue.png'
-import crateYellow from '../../assets/numberSafari/crates/crate-yellow.png'
-import cratePink from '../../assets/numberSafari/crates/crate-pink.png'
-import crateGreen from '../../assets/numberSafari/crates/crate-green.png'
-import { spring } from 'framer-motion'
+
 
 
 // REQUESTS
@@ -63,31 +57,20 @@ const requests = [
   },
 ]
 
-// CRATES
-const crates = [{
-  id: 1,
-  crateSrc: cratePink,
-  fruitSrc: raspberry,
-  fruitName: 'raspberry',
-}, {
-  id: 2,
-  crateSrc: crateGreen,
-  fruitSrc: apple,
-  fruitName: 'apple',
-}, {
-  id: 3,
-  crateSrc: crateYellow,
-  fruitSrc: orange,
-  fruitName: 'orange',
-}
-]
 
 
 const NumberSafari = () => {
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
   const currentRequest = requests[currentRequestIndex];
 
-  
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  )
+
   const handleCorrectDrop = () => {
     if (currentRequestIndex < requests.length - 1) {
       setCurrentRequestIndex(index => index + 1)
@@ -96,54 +79,38 @@ const NumberSafari = () => {
     }
   }
 
+  const handleDragEnd = (e) => {
+    const { active, over } = e;
+
+    if (!over) return
+
+    const draggedFruit = active.data?.current?.fruitType;
+    const droppedTargetId = over.id;
+
+    if (draggedFruit === currentRequest.fruitType && droppedTargetId === 'basket') {
+      handleCorrectDrop();
+    }
+  }
+
 
   return (
     <div>
       <SafariScene>
-        <AnimalRequest
-          animaltype={currentRequest.animalType}
-          fruitImg={currentRequest.fruitImg}
-          fruitType={currentRequest.fruitType}
-          animalSrc={currentRequest.animalImg}
-          amount={currentRequest.amount}
-          onCorrectDrop={handleCorrectDrop}
-        />
-        <CrateRow targetFruitType={currentRequest.fruitType} />
-        {/* <Box sx={{
-            position: "relative",
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-          }}>
-            <Box sx={{
-              position: "absolute",
-              bottom: "18px",
-              right: "25px",
-              display: "flex",
-              marginInline: "28px",
-              gap: "36px"
-            }}
-            >
-              {crates.map((crate, index) => (
-                <motion.div
-                  key={crate.id}
-                  initial={{ x: 200, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{
-                    delay: 4 + index * 0.5,
-                    type: spring,
-                    stiffness: 120,
-                  }}
-                >
-                  <Crate
-                    crateSrc={crate.crateSrc}
-                    fruitSrc={crate.fruitSrc}
-                    fruitName={crate.fruitName}
-                  />
-                </motion.div>
-              ))}
-            </Box>
-          </Box> */}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <AnimalRequest
+            animaltype={currentRequest.animalType}
+            fruitSrc={currentRequest.fruitImg}
+            fruitType={currentRequest.fruitType}
+            animalSrc={currentRequest.animalImg}
+            amount={currentRequest.amount}
+            onCorrectDrop={handleCorrectDrop}
+          />
+          <CrateRow targetFruitType={currentRequest.fruitType} />
+        </DndContext>
       </SafariScene>
     </div>
   )

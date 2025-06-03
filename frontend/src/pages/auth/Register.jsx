@@ -16,6 +16,8 @@ import {
 } from "@mui/material"
 import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material"
 
+import { useNavigate } from 'react-router-dom'
+
 
 const Register = () => {
     // STATE
@@ -28,6 +30,8 @@ const Register = () => {
     })
 
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+    const navigate = useNavigate()
 
     // FUNCTIONS
     const handleChange = (e) => {
@@ -46,6 +50,12 @@ const Register = () => {
             email: data.email,
             password: data.password,
         });
+
+        if (response.data.success) {
+            navigate('/thanks')
+        } else {
+            console.log('login failed')
+        }
 
         console.log(`Response: ${JSON.stringify(response.data)}`)
     }

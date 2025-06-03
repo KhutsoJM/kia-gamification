@@ -40,18 +40,18 @@ function App() {
         <Router>
           <Routes>
             <Route element={<PageLayout hasNavbar />}>
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/thanks" element={<RegisterThankYou />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/games" element={<GameSelection />} />
-              <Route path="/emotion-matcher" element={<EmotionMatcher />} />
-              <Route path="/number-safari" element={<NumberSafari />} />
             </Route>
 
             {/* PAGES WITHOUT NAVBARS */}
-            {/* <Route element={<PageLayout hasNavbar={false} />}>
-            </Route> */}
+            <Route element={<PageLayout hasNavbar={false} />}>
+              <Route path="/emotion-matcher" element={<EmotionMatcher />} />
+              <Route path="/number-safari" element={<NumberSafari />} />
+            </Route>
           </Routes>
         </Router>
       </ThemeProvider >

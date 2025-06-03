@@ -9,7 +9,7 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
             <motion.div
                 initial={{ x: -200, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 2.5, duration: 1, type: 'spring', bounce: 0.4 }}
+                transition={{ delay: 2.8, duration: 1, type: 'spring', bounce: 0.3 }}
                 style={{
                     position: 'absolute',
                     bottom: '10%',
@@ -27,7 +27,7 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
             <motion.div
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 6.4, duration: 0.5 }}
+                transition={{ delay: 4, duration: 0.5 }}
                 style={{
                     position: 'absolute',
                     bottom: '25%',
@@ -43,7 +43,8 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
                     Can I have {amount}
                     <img src={fruitSrc} alt={fruitType} style={{
                         width: '32px',
-                        verticalAlign: 'middle'
+                        verticalAlign: 'middle',
+                        paddingInline: '6px'
                     }} />, please?
                 </p>
             </motion.div>
