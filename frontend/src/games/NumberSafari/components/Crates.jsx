@@ -67,8 +67,7 @@ const Crate = ({ fruitSrc, crateSrc, fruitType }) => {
                         left: "40%",
                         width: "32px",
                         height: "32px",
-                        // transform: `${CSS.Translate.toString(transform)}`,
-                        transform: localTransform ? CSS.Translate.toString(localTransform) : "none",
+                        transform: `${CSS.Translate.toString(transform)}`,
                         opacity: isDragging ? 0.8 : 1,
                         transition: "transform 0.05s ease",
                     }}
