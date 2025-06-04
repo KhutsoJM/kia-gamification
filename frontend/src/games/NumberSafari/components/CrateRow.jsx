@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion'
 
-import Crate from "./Crates";
+import Crate from "./Crate";
 
 // ASSETS
 // fruits
 import apple from '../../../assets/numberSafari/fruits/normal/apple.png'
-import bananas from '../../../assets/numberSafari/fruits/normal/bananas.png'
+import banana from '../../../assets/numberSafari/fruits/normal/banana.png'
 import blueberry from '../../../assets/numberSafari/fruits/normal/blueberry.png'
-import cherries from '../../../assets/numberSafari/fruits/normal/cherries.png'
+import cherry from '../../../assets/numberSafari/fruits/normal/cherry.png'
 import orange from '../../../assets/numberSafari/fruits/normal/orange.png'
 import raspberry from '../../../assets/numberSafari/fruits/normal/raspberry.png'
 import watermelon from '../../../assets/numberSafari/fruits/normal/watermelon.png'
+import grape from '../../../assets/numberSafari/fruits/normal/grape.png'
 
 // crates
 import crateBlue from '../../../assets/numberSafari/crates/crate-blue.png'
@@ -18,7 +19,7 @@ import crateYellow from '../../../assets/numberSafari/crates/crate-yellow.png'
 import cratePink from '../../../assets/numberSafari/crates/crate-pink.png'
 import crateGreen from '../../../assets/numberSafari/crates/crate-green.png'
 
-const CrateRow = ({ fruitCounts, onIncrement, onDecrement, requestFruitType }) => {
+const CrateRow = ({ fruitCounts, onIncrement, onDecrement, requestFruitType, handleDrop }) => {
     const cratesData = [
         {
             fruitType: 'blueberry',
@@ -62,6 +63,7 @@ const CrateRow = ({ fruitCounts, onIncrement, onDecrement, requestFruitType }) =
                         fruitSrc={crate.fruitImg}
                         crateSrc={crate.crateImg}
                         fruitType={crate.fruitType}
+                        handleDrop={handleDrop}
                         // count={0}
                         onIncrement={() => onIncrement(crate.fruitType)}
                         onDecrement={() => onDecrement(crate.fruitType)}

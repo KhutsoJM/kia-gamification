@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { DndContext, closestCenter, PointerSensor, useSensors, useSensor } from '@dnd-kit/core'
 
 import { useState } from 'react'
+import './NumberSafari.css'
 
 
 // MUI
@@ -28,14 +28,13 @@ import snake from '../../assets/numberSafari/animals/Round/snake.png'
 
 // fruits
 import apple from '../../assets/numberSafari/fruits/normal/apple.png'
-import bananas from '../../assets/numberSafari/fruits/normal/bananas.png'
+import banana from '../../assets/numberSafari/fruits/normal/banana.png'
 import blueberry from '../../assets/numberSafari/fruits/normal/blueberry.png'
-import cherries from '../../assets/numberSafari/fruits/normal/cherries.png'
+import cherry from '../../assets/numberSafari/fruits/normal/cherry.png'
 import orange from '../../assets/numberSafari/fruits/normal/orange.png'
 import raspberry from '../../assets/numberSafari/fruits/normal/raspberry.png'
 import watermelon from '../../assets/numberSafari/fruits/normal/watermelon.png'
-
-// crates
+import grape from '../../assets/numberSafari/fruits/normal/grape.png'
 
 
 
@@ -53,23 +52,50 @@ const requests = [
     animalImg: parrot,
     fruitType: 'blueberry',
     fruitImg: blueberry,
-    amount: 3,
+    amount: 4,
+  },
+  {
+    animalType: 'pig',
+    animalImg: pig,
+    fruitType: 'apple',
+    fruitImg: apple,
+    amount: 6,
   },
 ]
-
 
 
 const NumberSafari = () => {
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
   const currentRequest = requests[currentRequestIndex];
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
-  )
+  const handleDrop = ({ droppedFruitType, droppedFruitCount, fruitRect }) => {
+    for (const [type, basketRef] of Object.entries(window.baskets || {})) {
+      if (!basketRef.current) continue;
+      const basketRect = basketRef.current.getBoundingClientRect();
+
+      const isOverlapping =
+        fruitRect.left < basketRect.right &&
+        fruitRect.right > basketRect.left &&
+        fruitRect.top < basketRect.bottom &&
+        fruitRect.bottom > basketRect.top;
+
+      if (isOverlapping) {
+        const triggerShake = window.basketTriggers?.[type];
+
+        if (droppedFruitType === currentRequest.fruitType) {
+          if (droppedFruitCount === currentRequest.amount) {
+            console.log('thank you!')
+            handleCorrectDrop()
+          } else {
+            console.log('not the right amount!')
+            if (triggerShake) triggerShake();
+          }
+        } else {
+          if (triggerShake) triggerShake();
+        }
+      }
+    }
+  }
 
   const handleCorrectDrop = () => {
     if (currentRequestIndex < requests.length - 1) {
@@ -79,38 +105,17 @@ const NumberSafari = () => {
     }
   }
 
-  const handleDragEnd = (e) => {
-    const { active, over } = e;
-
-    if (!over) return
-
-    const draggedFruit = active.data?.current?.fruitType;
-    const droppedTargetId = over.id;
-
-    if (draggedFruit === currentRequest.fruitType && droppedTargetId === 'basket') {
-      handleCorrectDrop();
-    }
-  }
-
-
   return (
     <div>
       <SafariScene>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <AnimalRequest
-            animaltype={currentRequest.animalType}
-            fruitSrc={currentRequest.fruitImg}
-            fruitType={currentRequest.fruitType}
-            animalSrc={currentRequest.animalImg}
-            amount={currentRequest.amount}
-            onCorrectDrop={handleCorrectDrop}
-          />
-          <CrateRow targetFruitType={currentRequest.fruitType} />
-        </DndContext>
+        <AnimalRequest
+          animaltype={currentRequest.animalType}
+          fruitSrc={currentRequest.fruitImg}
+          fruitType={currentRequest.fruitType}
+          animalSrc={currentRequest.animalImg}
+          amount={currentRequest.amount}
+        />
+        <CrateRow targetFruitType={currentRequest.fruitType} handleDrop={handleDrop} />
       </SafariScene>
     </div>
   )

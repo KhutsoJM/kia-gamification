@@ -10,3 +10,8 @@ body {
     background-repeat: 'no-repeat';
     position: relative */
 }
+
+p {
+    padding: 0;
+    margin: 0;
+}

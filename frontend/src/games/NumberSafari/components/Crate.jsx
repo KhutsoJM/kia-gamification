@@ -1,30 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { motion, scale } from 'framer-motion';
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 
 import { Box, IconButton } from "@mui/material"
 import { Add, Remove } from "@mui/icons-material";
 
 
-const Crate = ({ fruitSrc, crateSrc, fruitType }) => {
+const Crate = ({ fruitSrc, crateSrc, fruitType, handleDrop }) => {
 
     const [fruitCount, setFruitCount] = useState(0);
-    // const [localTransform, setLocalTransform] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
 
-
-    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-        id: fruitType,
-        data: { fruitType },
-    });
-
-    // console.log(`Crate fruitType: ${fruitType}`);
 
     const updateFruitCount = (change) => {
         change === "increase" ?
             setFruitCount(prev => prev + 1) :
             setFruitCount(prev => Math.max(0, prev - 1))
     }
+
 
     return (
         <Box
@@ -53,23 +45,55 @@ const Crate = ({ fruitSrc, crateSrc, fruitType }) => {
                     }}
                 />
 
-                {/* Fruit icon */}
-                <motion.img
-                    ref={setNodeRef}
-                    {...listeners}
-                    {...attributes}
+                {/* Copy of the fruit icon */}
+                <img
                     src={fruitSrc}
                     alt={fruitType}
-                    // animate={isDragging ? { scale: 1.25 } : { scale: 1 }}
                     style={{
                         position: "absolute",
                         top: "45%",
                         left: "40%",
                         width: "32px",
                         height: "32px",
-                        transform: `${CSS.Translate.toString(transform)}`,
-                        opacity: isDragging ? 0.8 : 1,
+                        zIndex: 0,
+                        pointerEvents: 'none',
+                        opacity: isDragging ? 0.4 : 1,
+                        transition: ' opacity 1.25s',
+                    }}
+                />
+
+                {/* Fruit icon */}
+                <motion.img
+                    drag
+                    dragSnapToOrigin
+                    dragMomentum={false}
+                    whileDrag={{ scale: 1.25 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    data-fruittype={fruitType}
+
+                    onMouseDown={() => setIsDragging(true)}
+                    onMouseUp={() => setIsDragging(false)}
+                    onDragEnd={(e) => {
+                        const droppedFruitType = e.target.dataset.fruittype
+                        const droppedFruitCount = fruitCount
+
+                        // get the position and size of the fruit when dropped
+                        const fruitRect = e.target.getBoundingClientRect()
+
+                        handleDrop({ droppedFruitType, droppedFruitCount, fruitRect })
+                    }}
+
+                    src={fruitSrc}
+                    alt={fruitType}
+                    style={{
+                        position: "absolute",
+                        top: "45%",
+                        left: "40%",
+                        width: "32px",
+                        height: "auto",
+                        opacity: isDragging ? 0.95 : 1,
                         transition: "transform 0.05s ease",
+                        zIndex: 10,
                     }}
                 />
 

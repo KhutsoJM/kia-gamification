@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import Basket from './Basket'
-import { Box, Typography } from '@mui/material'
 
 const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onCorrectDrop }) => {
     return (
@@ -19,8 +18,8 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
                     gap: '16px',
                 }}
             >
-                <img src={animalSrc} alt={animalType} style={{ height: '100px' }} />
-                <Basket acceptType={fruitType} onDrop={onCorrectDrop} />
+                <img src={animalSrc} alt={animalType} style={{ height: '90px', width: 'auto' }} />
+                <Basket acceptType={fruitType} />
             </motion.div>
 
             {/* Animated Speech Bubble */}
@@ -34,18 +33,21 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
                     left: '15%',
                     background: 'white',
                     borderRadius: '16px',
-                    padding: '8px 20px',
+                    padding: '8px 16px',
                     boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
                     zIndex: 10,
                 }}
             >
-                <p>
-                    Can I have {amount}
+                <p style={{
+                    padding: '8px 0px'
+                }}>
+                    3 + {amount}
                     <img src={fruitSrc} alt={fruitType} style={{
-                        width: '32px',
+                        width: '21px',
+                        height: 'auto',
                         verticalAlign: 'middle',
-                        paddingInline: '6px'
-                    }} />, please?
+                        marginInline: '6px'
+                    }} />
                 </p>
             </motion.div>
         </>
