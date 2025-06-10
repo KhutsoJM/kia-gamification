@@ -1,4 +1,5 @@
 import express from "express";
+import authMiddleware from "../middleware.js";
 
 import {
     register,
@@ -8,7 +9,7 @@ import {
 const router = express.Router();
 
 
-router.post('/register', register)
+router.post('/register', authMiddleware, register)
 
 router.post('/login', login)
 

@@ -44,20 +44,24 @@ const Register = () => {
     const handleSubmit = async (e) => {
         // ADD FEATURE: Check if 'confirm password is correct'
         e.preventDefault()
+
         const response = await axios.post('http://localhost:3000/users/auth/register', {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
             password: data.password,
+            confirmPassword: data.confirmPassword,
+        }, {
+            validateStatus: (status) => {
+                return status >= 200 && status < 300 || status === 401 || status === 400;
+            }
         });
 
         if (response.data.success) {
             navigate('/thanks')
         } else {
-            console.log('login failed')
+            console.log(`Error: ${response.data.error}`)
         }
-
-        console.log(`Response: ${JSON.stringify(response.data)}`)
     }
 
     const handleClickPasswordIcon = () => {

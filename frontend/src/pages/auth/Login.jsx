@@ -46,6 +46,10 @@ const Login = () => {
         const response = await axios.post('http://localhost:3000/users/auth/login', {
             email: data.email,
             password: data.password,
+        }, {
+            validateStatus: (status) => {
+                return status >= 200 && status < 600;
+            }
         });
 
         console.log(response.data.success)
@@ -53,7 +57,7 @@ const Login = () => {
         if (response.data.success) {
             navigate('/thanks')
         } else {
-            console.log('login failed')
+            console.log(`Error: ${response.data.error}`)
         }
     }
 
