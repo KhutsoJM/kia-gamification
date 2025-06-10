@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion'
 import Basket from './Basket'
 
-const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onCorrectDrop }) => {
+const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onCorrectDrop, isFirst }) => {
+    // const entranceDelay = isFirst ? 2.8 : 0.6
+
     return (
         <>
             {/* Animated Animal + Basket */}
@@ -9,6 +11,7 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
                 initial={{ x: -200, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 2.8, duration: 1, type: 'spring', bounce: 0.3 }}
+                exit={{ x: -200, opacity: 0 }} // smooth exit
                 style={{
                     position: 'absolute',
                     bottom: '10%',
@@ -26,7 +29,8 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
             <motion.div
                 initial={{ scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 4, duration: 0.5 }}
+                transition={{ delay: 6.25, duration: 0.5 }}
+                exit={{ scale: 0, opacity: 0 }} // smooth exit
                 style={{
                     position: 'absolute',
                     bottom: '25%',
@@ -41,7 +45,7 @@ const AnimalRequest = ({ animalType, animalSrc, fruitType, fruitSrc, amount, onC
                 <p style={{
                     padding: '8px 0px'
                 }}>
-                    3 + {amount}
+                    {amount}
                     <img src={fruitSrc} alt={fruitType} style={{
                         width: '21px',
                         height: 'auto',

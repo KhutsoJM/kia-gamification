@@ -1,4 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion'
+import { Howl } from 'howler'
+
 
 import Crate from "./Crate";
 
@@ -19,24 +22,45 @@ import crateYellow from '../../../assets/numberSafari/crates/crate-yellow.png'
 import cratePink from '../../../assets/numberSafari/crates/crate-pink.png'
 import crateGreen from '../../../assets/numberSafari/crates/crate-green.png'
 
+// sounds
+// import crateDrop from '../../../assets/numberSafari/sounds/crate-drop.mp3'
+import crateDrop from '../../../assets/numberSafari/sounds/thump-2.mp3'
+
+
+const cratesData = [
+    {
+        fruitType: 'blueberry',
+        crateImg: crateBlue,
+        fruitImg: blueberry
+    },
+    {
+        fruitType: 'raspberry',
+        crateImg: cratePink,
+        fruitImg: raspberry
+    },
+    {
+        fruitType: 'apple',
+        crateImg: crateGreen,
+        fruitImg: apple
+    },
+]
+
 const CrateRow = ({ fruitCounts, onIncrement, onDecrement, requestFruitType, handleDrop }) => {
-    const cratesData = [
-        {
-            fruitType: 'blueberry',
-            crateImg: crateBlue,
-            fruitImg: blueberry
-        },
-        {
-            fruitType: 'raspberry',
-            crateImg: cratePink,
-            fruitImg: raspberry
-        },
-        {
-            fruitType: 'apple',
-            crateImg: crateGreen,
-            fruitImg: apple
-        },
-    ]
+
+    // const 
+
+    useEffect(() => {
+        const delays = [4.4, 4.9, 5.4]
+        cratesData.forEach((_, index) => {
+            const delay = delays[index]
+            setTimeout(() => {
+                const sound = new Audio(crateDrop)
+                sound.volume = 0.3
+                sound.play()
+            }, delay * 1000)
+        })
+    }, [])
+
 
     return (
         <div style={{
@@ -49,10 +73,11 @@ const CrateRow = ({ fruitCounts, onIncrement, onDecrement, requestFruitType, han
             {cratesData.map((crate, i) => (
                 <motion.div
                     key={crate.fruitType}
-                    initial={{ x: 100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
+                    initial={{ y: -100, opacity: 0, scale: 0.6 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+
                     transition={{
-                        delay: 5 + i * 0.3,
+                        delay: 4.4 + i * 0.5,
                         duration: 0.8,
                         type: 'spring',
                         bounce: 0.3,

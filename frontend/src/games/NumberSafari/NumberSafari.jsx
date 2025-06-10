@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './NumberSafari.css'
 
 
@@ -67,8 +67,16 @@ const requests = [
 const NumberSafari = () => {
   const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
   const currentRequest = requests[currentRequestIndex];
+  let isFirst = true;
+
+  const [showAnimal, setShowAnimal] = useState(false);
+
+  useEffect(() => {
+    // triggerAnimalEntrance();
+  }, [currentRequest])
 
   const handleDrop = ({ droppedFruitType, droppedFruitCount, fruitRect }) => {
+    isFirst = false
     for (const [type, basketRef] of Object.entries(window.baskets || {})) {
       if (!basketRef.current) continue;
       const basketRect = basketRef.current.getBoundingClientRect();
@@ -99,22 +107,32 @@ const NumberSafari = () => {
 
   const handleCorrectDrop = () => {
     if (currentRequestIndex < requests.length - 1) {
-      setCurrentRequestIndex(index => index + 1)
+
+      handleRequestComplete()
     } else {
       console.log("Game Over!");
     }
   }
 
+  const handleRequestComplete = () => {
+    setTimeout(() => {
+      setCurrentRequestIndex(index => index + 1)
+    }, 300)
+  }
+
   return (
     <div>
       <SafariScene>
-        <AnimalRequest
-          animaltype={currentRequest.animalType}
-          fruitSrc={currentRequest.fruitImg}
-          fruitType={currentRequest.fruitType}
-          animalSrc={currentRequest.animalImg}
-          amount={currentRequest.amount}
-        />
+        <AnimatePresence mode='wait'>
+          <AnimalRequest
+            key={`${currentRequest.animalType}-${Math.random()}`}
+            animaltype={currentRequest.animalType}
+            fruitSrc={currentRequest.fruitImg}
+            fruitType={currentRequest.fruitType}
+            animalSrc={currentRequest.animalImg}
+            amount={currentRequest.amount}
+          />
+        </AnimatePresence>
         <CrateRow targetFruitType={currentRequest.fruitType} handleDrop={handleDrop} />
       </SafariScene>
     </div>

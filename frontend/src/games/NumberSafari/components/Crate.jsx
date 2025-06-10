@@ -1,20 +1,32 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { motion, scale } from 'framer-motion';
+import { Howl } from "howler";
 
 import { Box, IconButton } from "@mui/material"
 import { Add, Remove } from "@mui/icons-material";
+
+// sounds
+import click from '../../../assets/numberSafari/sounds/click.wav'
+import emptyClick from '../../../assets/numberSafari/sounds/click-2.mp3'
 
 
 const Crate = ({ fruitSrc, crateSrc, fruitType, handleDrop }) => {
 
     const [fruitCount, setFruitCount] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
+    const clickSound = new Howl({ src: [click] })
+    const emptyClickSound = new Howl({ src: [emptyClick] })
+
+    // const clickSound = useRef(new Audio(click))
 
 
     const updateFruitCount = (change) => {
         change === "increase" ?
             setFruitCount(prev => prev + 1) :
             setFruitCount(prev => Math.max(0, prev - 1))
+
+        fruitCount === 0 && change === "decrease" ? emptyClickSound.play() : clickSound.play();
+        
     }
 
 
@@ -122,7 +134,12 @@ const Crate = ({ fruitSrc, crateSrc, fruitType, handleDrop }) => {
             </Box>
 
             {/* Add icon */}
-            <IconButton sx={{ color: "black", marginTop: "28px" }} onClick={() => updateFruitCount("increase")}>
+            <IconButton
+                sx={{
+                    color: "black",
+                    marginTop: "28px"
+                }}
+                onClick={() => updateFruitCount("increase")}>
                 <Add />
             </IconButton>
         </Box >

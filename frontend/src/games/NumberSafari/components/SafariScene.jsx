@@ -1,11 +1,15 @@
 import { Box } from '@mui/material'
+import { Howl } from 'howler'
 import { motion } from 'framer-motion'
-
+import { useEffect } from 'react'
 
 // ASSETS
 // environment
 import safariBg from '../../../assets/numberSafari/environment/background/safari-background.jpg'
 import shrub from '../../../assets/numberSafari/environment/trees/shrub-1.png'
+
+// sounds
+import backgroundAmbience from '../../../assets/numberSafari/sounds/nature-ambience.mp3'
 
 import basket from '../../../assets/numberSafari/wooden-bucket.png'
 
@@ -18,6 +22,22 @@ import raspberry from '../../../assets/numberSafari/fruits/normal/raspberry.png'
 
 
 const SafariScene = ({ children }) => {
+
+    const backgroundAmbienceSfx = new Howl({
+        src: [backgroundAmbience],
+        loop: true,
+        volume: 0.2,
+    })
+
+    // ambience
+    // useEffect(() => {
+    //     backgroundAmbienceSfx.play();
+
+    //     return () => {
+    //         backgroundAmbienceSfx.stop();
+    //     }
+    // }, [])
+
     return (
         <Box sx={{
             position: 'relative',
