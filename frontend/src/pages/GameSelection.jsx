@@ -83,7 +83,7 @@ const games = [
   },
 ];
 
-const GameSelection = ({ onSelectGame }) => {
+const GameSelection = () => {
 
   const [spectrum, setSpectrum] = useState('')
 
@@ -118,8 +118,8 @@ const GameSelection = ({ onSelectGame }) => {
         </FormControl>
       </Box>
       <Grid display="flex" justifyContent="center" container spacing={4}>
-        {games.map((game) => (
-          <Grid item xs={12} sm={6} md={4} key={game.id} sx={{
+        {games.map((game, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index} sx={{
             transition: "0.3s",
             '&:hover': {
               boxShadow: "7"
@@ -130,7 +130,7 @@ const GameSelection = ({ onSelectGame }) => {
               height: "100%",
               objectFit: "cover",
             }}>
-              <CardActionArea sx={{ height: "100%" }} onClick={() => onSelectGame(game.id)}>
+              <CardActionArea sx={{ height: "100%" }}>
 
                 <CardMedia
                   component="img"

@@ -17,10 +17,12 @@ import {
 import { VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material'
 
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../hooks/useAuth'
 
 
 const Login = () => {
     const navigate = useNavigate()
+    const { setUser } = useAuth()
 
     // STATE
     const [data, setData] = useState({
@@ -52,10 +54,13 @@ const Login = () => {
             }
         });
 
-        console.log(response.data.success)
-
         if (response.data.success) {
-            navigate('/thanks')
+            const { token, userDetails } = response.data;
+            // Save token and user data in local storage (for now)
+            localStorage.setItem('authToken', token)
+            localStorage.setItem('user', JSON.stringify(userDetails))
+            setUser(userDetails)
+            navigate('/profile')
         } else {
             console.log(`Error: ${response.data.error}`)
         }

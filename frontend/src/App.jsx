@@ -1,6 +1,7 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 
 import './App.css'
 
@@ -37,23 +38,25 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Router>
-          <Routes>
-            <Route element={<PageLayout hasNavbar />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/thanks" element={<RegisterThankYou />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/games" element={<GameSelection />} />
-            </Route>
+        <AuthProvider>
+          <Router>
+            <Routes>
+              <Route element={<PageLayout hasNavbar />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/thanks" element={<RegisterThankYou />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/games" element={<GameSelection />} />
+              </Route>
 
-            {/* PAGES WITHOUT NAVBARS */}
-            <Route element={<PageLayout hasNavbar={false} />}>
-              <Route path="/emotion-matcher" element={<EmotionMatcher />} />
-              <Route path="/number-safari" element={<NumberSafari />} />
-            </Route>
-          </Routes>
-        </Router>
+              {/* PAGES WITHOUT NAVBARS */}
+              <Route element={<PageLayout hasNavbar={false} />}>
+                <Route path="/emotion-matcher" element={<EmotionMatcher />} />
+                <Route path="/number-safari" element={<NumberSafari />} />
+              </Route>
+            </Routes>
+          </Router>
+        </AuthProvider>
       </ThemeProvider >
     </>
   )
