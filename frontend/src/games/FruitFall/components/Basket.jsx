@@ -1,7 +1,27 @@
+import { Box, Typography } from "@mui/material";
 
-const Basket = () => {
+import basket from '../../../assets/FruitFall/props/wooden-bucket.png';
+
+
+const Basket = ({ expectedFruit, expectedAmount, onDrop }) => {
     return (
-        <div>Basket</div>
+        <Box
+            sx={{
+                width: 160,
+                height: "auto",
+                position: "relative",
+            }}
+            onDrop={onDrop}
+            onDragOver={(e) => e.preventDefault()}
+        >
+            <Box
+                component="img"
+                src={basket}
+                alt="basket"
+                sx={{ width: "100%", height: "100%" }}
+                draggable={false}
+            />
+        </Box>
     )
 }
 

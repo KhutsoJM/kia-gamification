@@ -1,9 +1,43 @@
 import { Box } from "@mui/material";
+import { motion } from "framer-motion";
 
-const Basket = () => {
+// COMPONENTS
+import Crate from "./Crate";
+
+const CrateRow = ({ crates }) => {
     return (
-        <div>Crate Row</div>
+        <Box
+            sx={{
+                position: "absolute",
+                bottom: "3%",
+                right: "5%",
+                display: "flex",
+                gap: "64px",
+            }}
+        >
+            {crates.map((crate, index) => (
+                <motion.div
+                    key={crate.fruitType}
+                    // src={crate.crateImg}
+                    alt={`${crate.fruitType} crate`}
+                    initial={{ y: -300, opacity: 0, scale: 0.8 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    transition={{
+                        delay: index * 0.7,
+                        duration: 0.6,
+                        type: "spring",
+                        bounce: 0.4,
+                    }}
+                >
+                    <Crate
+                        crateImg={crate.crateImg}
+                        fruitImg={crate.fruitImg}
+                        fruitType={crate.fruitType}
+                    />
+                </motion.div>
+            ))}
+        </Box>
     )
 }
 
-export default Basket;
+export default CrateRow;

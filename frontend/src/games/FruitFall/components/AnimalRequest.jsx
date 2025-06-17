@@ -1,5 +1,6 @@
+import { Box, Typography } from "@mui/material";
 
-const AnimalRequest = () => {
+const AnimalRequest = ({ animalImg, animaltype, fruitImg, fruitType, amount }) => {
 
 }
 
