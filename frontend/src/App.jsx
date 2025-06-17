@@ -19,6 +19,7 @@ import ImpulseControl from './games/ImpulesControl/ImpulseControl';
 import KoalaBreathingGame from './games/KoalaBreathing/KoalaBreathingGame';
 import PuzzleGame from './games/PuzzleGame/PuzzleGame';
 import NumberSafari from './games/NumberSafari/NumberSafari';
+import FruitFall from './games/FruitFall/FruitFall';
 
 // UI
 import Navbar from './components/UI/Navbar';
@@ -53,6 +54,7 @@ function App() {
               <Route element={<PageLayout hasNavbar={false} />}>
                 <Route path="/emotion-matcher" element={<EmotionMatcher />} />
                 <Route path="/number-safari" element={<NumberSafari />} />
+                <Route path="/fruitfall" element={<FruitFall />} />
               </Route>
             </Routes>
           </Router>
