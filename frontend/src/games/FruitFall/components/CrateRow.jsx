@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 // COMPONENTS
 import Crate from "./Crate";
 
-const CrateRow = ({ crates }) => {
+const CrateRow = ({ crates, fruitCounts, handleIncrement, handleDecrement, setDraggedFruit }) => {
     return (
         <Box
             sx={{
@@ -33,6 +33,10 @@ const CrateRow = ({ crates }) => {
                         crateImg={crate.crateImg}
                         fruitImg={crate.fruitImg}
                         fruitType={crate.fruitType}
+                        fruitCount={fruitCounts[crate.fruitType] || 0}
+                        onIncrement={() => handleIncrement(crate.fruitType)}
+                        onDecrement={() => handleDecrement(crate.fruitType)}
+                        setDraggedFruit={setDraggedFruit}
                     />
                 </motion.div>
             ))}

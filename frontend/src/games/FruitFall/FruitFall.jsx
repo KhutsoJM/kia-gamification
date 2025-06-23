@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // MUI
 import { Box } from "@mui/material";
@@ -44,7 +44,7 @@ const levelOneConfig = [
         background: "background.png",
         requestPool: [
             {
-                animaltype: "giraffe",
+                animalType: "giraffe",
                 animalImg: giraffe,
                 fruitType: "raspberry",
                 fruitImg: raspberry,
@@ -52,13 +52,22 @@ const levelOneConfig = [
                 frustrationLimit: 3,
             },
             {
-                animaltype: "parrot",
+                animalType: "parrot",
                 animalImg: parrot,
-                fruitType: "cherry",
-                fruitImg: cherry,
-                amount: 2,
+                fruitType: "blueberry",
+                fruitImg: blueberry,
+                amount: 4,
                 frustrationLimit: 3,
-                expression: "5 - 2"
+                expression: "5 - 1",
+            },
+            {
+                animalType: "rabbit",
+                animalImg: rabbit,
+                fruitType: "apple",
+                fruitImg: apple,
+                amount: 1,
+                frustrationLimit: 3,
+                expression: "4 - 3",
             },
         ],
         cratesData: [
@@ -84,39 +93,103 @@ const levelOneConfig = [
 const FruitFall = () => {
     const level = levelOneConfig[0];
     const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
-    const [animalsLost, setAnimalsLost] = useState(0);
+    const [animalsLost, setAnimalsLost] = useState([]);
+    const [frustrationCount, setFrustrationCount] = useState(0);
+
+
+    const [draggedFruit, setDraggedFruit] = useState({
+        fruitType: '',
+        fruitImg: '',
+    });
+
     const [fruitCounts, setFruitCounts] = useState({
         blueberry: 0,
         raspberry: 0,
         apple: 0,
     });
 
+    useEffect(() => {
+        if (frustrationCount >= currentRequest.frustrationLimit) {
+            console.log("Animal left!");
+            setAnimalsLost(prev => [...prev, currentRequest.animalType]);
+            setFrustrationCount(0);
+
+            if (currentRequestIndex < level.requestPool.length - 1) {
+                setCurrentRequestIndex(prev => prev + 1);
+            } else {
+                console.log("🎉 Level complete!");
+            }
+        }
+    }, [frustrationCount]);
+
+
     const currentRequest = level.requestPool[currentRequestIndex];
 
-    const handleDrop = (fruitType, amount) => {
+
+    const handleDrop = (droppedFruitType, droppedAmount) => {
+        console.log(`Fruit Dropped: ${droppedFruitType}, Amount: ${droppedAmount}`);
         // handles fruit drop
-        if (fruitType === currentRequest.fruitType && amount === currentRequest.amount) {
-            // right
-            console.log('correct!')
+
+        const isCorrect = (
+            droppedFruitType === currentRequest.fruitType &&
+            droppedAmount === currentRequest.amount
+        );
+
+        if (isCorrect) {
+            handleCorrectMatch(droppedFruitType);
+
         } else {
-            // wrong, show feedback, frustration, etc
-            console.log('incorrect')
+            handleIncorrectMatch(droppedFruitType);
         }
     }
 
-    const increment = (fruitType) => {
+    const handleCorrectMatch = (fruit) => {
+        // Reset frustration count
+        setFrustrationCount(0);
+
+        // Reset count
+        setFruitCounts(prev => ({
+            ...prev,
+            [fruit]: 0,
+        }));
+
+        // Move onto the next animal
+        if (currentRequestIndex < level.requestPool.length - 1) {
+            setCurrentRequestIndex(prev => prev + 1);
+        } else {
+            console.log("🎉 Level complete!");
+            // TODO: Handle level completion (score, stars, etc)
+        }
+    }
+
+    const handleIncorrectMatch = (fruit) => {
+        // wrong, show feedback, frustration, etc
+        setFrustrationCount(prev => {
+            let newFrustrationCount = prev + 1;
+            console.log(newFrustrationCount);
+
+            if (newFrustrationCount === 1) console.log("Animal is annoyed 😒");
+            else if (newFrustrationCount === 2) console.log("Animal is frustrated 💢");
+            else if (newFrustrationCount === 3) console.log("Animal is angry! 😡")
+
+            return newFrustrationCount;
+        })
+    }
+
+    const handleIncrement = (fruitType) => {
         setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] + 1)
         }))
     }
 
-    const decrement = (fruitType) => {
-         setFruitCounts(prev => ({
+    const handleDecrement = (fruitType) => {
+        setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] - 1)
         }))
     }
+
 
     return (
         <Box
@@ -131,13 +204,33 @@ const FruitFall = () => {
                 backgroundPosition: "center",
             }}
         >
-            <AnimalRequest request={currentRequest} />
-            <Basket
-                expectedFruit={currentRequest.fruitType}
-                expectedAmount={currentRequest.amount}
-                onDrop={handleDrop}
+            <Box
+                sx={{
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-start",
+                    padding: "2% 5%",
+                    gap: "32px",
+                }}
+            >
+                <AnimalRequest
+                    key={currentRequestIndex}
+                    request={currentRequest}
+                    draggedFruit={draggedFruit}
+                    handleDrop={handleDrop}
+                />
+            </Box>
+            <CrateRow
+                crates={level.cratesData}
+                fruitCounts={fruitCounts}
+                handleIncrement={handleIncrement}
+                handleDecrement={handleDecrement}
+                setDraggedFruit={setDraggedFruit}
             />
-            <CrateRow crates={level.cratesData} />
         </Box>
     )
 }
