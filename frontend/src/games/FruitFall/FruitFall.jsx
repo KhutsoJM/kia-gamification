@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+// FRAMER MOTION
+import { AnimatePresence } from "framer-motion";
+
 // MUI
 import { Box } from "@mui/material";
 
@@ -50,6 +53,7 @@ const levelOneConfig = [
                 fruitImg: raspberry,
                 amount: 3,
                 frustrationLimit: 3,
+                expression: "6 - 3",
             },
             {
                 animalType: "parrot",
@@ -96,7 +100,6 @@ const FruitFall = () => {
     const [animalsLost, setAnimalsLost] = useState([]);
     const [frustrationCount, setFrustrationCount] = useState(0);
 
-
     const [draggedFruit, setDraggedFruit] = useState({
         fruitType: '',
         fruitImg: '',
@@ -111,6 +114,8 @@ const FruitFall = () => {
     const [pointerPosition, setPointerPosition] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
 
+    const [phase, setPhase] = useState("bubbleEntering");
+
     useEffect(() => {
         if (frustrationCount >= currentRequest.frustrationLimit) {
             console.log("Animal left!");
@@ -118,7 +123,7 @@ const FruitFall = () => {
             setFrustrationCount(0);
 
             if (currentRequestIndex < level.requestPool.length - 1) {
-                setCurrentRequestIndex(prev => prev + 1);
+                handleNextRequest();
             } else {
                 console.log("🎉 Level complete!");
             }
@@ -158,7 +163,8 @@ const FruitFall = () => {
 
         // Move onto the next animal
         if (currentRequestIndex < level.requestPool.length - 1) {
-            setCurrentRequestIndex(prev => prev + 1);
+            // setCurrentRequestIndex(prev => prev + 1);
+            handleNextRequest();
         } else {
             console.log("🎉 Level complete!");
             // TODO: Handle level completion (score, stars, etc)
@@ -193,6 +199,12 @@ const FruitFall = () => {
         }))
     }
 
+    const handleNextRequest = () => {
+        setTimeout(() => {
+            setCurrentRequestIndex(prev => prev + 1);
+        }, 500);
+    }
+
 
     return (
         <Box
@@ -216,18 +228,21 @@ const FruitFall = () => {
                     display: "flex",
                     alignItems: "flex-end",
                     justifyContent: "flex-start",
-                    padding: "2% 5%",
                     gap: "32px",
                 }}
             >
-                <AnimalRequest
-                    key={currentRequestIndex}
-                    request={currentRequest}
-                    draggedFruit={draggedFruit}
-                    handleDrop={handleDrop}
-                    pointerPosition={pointerPosition}
-                    isDragging={isDragging}
-                />
+                <AnimatePresence mode="wait">
+                    <AnimalRequest
+                        key={currentRequestIndex}
+                        request={currentRequest}
+                        draggedFruit={draggedFruit}
+                        handleDrop={handleDrop}
+                        pointerPosition={pointerPosition}
+                        isDragging={isDragging}
+                        phase={phase}
+                        setPhase={setPhase}
+                    />
+                </AnimatePresence>
             </Box>
             <CrateRow
                 crates={level.cratesData}

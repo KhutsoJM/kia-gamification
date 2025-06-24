@@ -20,13 +20,13 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
         const basketRect = basketRef.current?.getBoundingClientRect();
         const fruitRect = draggedFruit?.fruitRef?.current?.getBoundingClientRect();
 
-        // const { x, y } = pointerPosition;
+        const { x, y } = pointerPosition;
 
-        // const pointerIntersects =
-        //     x > basketRect.left &&
-        //     x < basketRect.right &&
-        //     y > basketRect.top &&
-        //     y < basketRect.bottom;
+        const pointerIntersects =
+            x > basketRect.left &&
+            x < basketRect.right &&
+            y > basketRect.top &&
+            y < basketRect.bottom;
 
         const intersects =
             fruitRect.right > basketRect.left &&
@@ -34,7 +34,8 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
             fruitRect.bottom > basketRect.top &&
             fruitRect.top < basketRect.bottom;
 
-        if (intersects && !isDragging) {
+        if (pointerIntersects && !isDragging) {
+            console.log('dropped inside basket')
 
             const isCorrect = draggedFruit.fruitType === expectedFruit && draggedFruit.fruitCount === expectedAmount;
             isHovering && setIsHovering(false);
@@ -46,17 +47,16 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
             setTimeout(() => {
                 setShowFeedback(false)
                 setIsCorrectDrop(false);
-            }, 1000);
+            }, 600);
 
-            setTimeout(() => { onDrop(draggedFruit.fruitType, draggedFruit.fruitCount) }, 1000);
+            // setTimeout(() => { onDrop(draggedFruit.fruitType, draggedFruit.fruitCount) }, 1000);
+            onDrop(draggedFruit.fruitType, draggedFruit.fruitCount)
 
         } else if (intersects) {
             !isHovering && setIsHovering(true);
         } else {
             isHovering && setIsHovering(false);
         }
-
-
     }, [pointerPosition, isDragging, draggedFruit]);
 
 

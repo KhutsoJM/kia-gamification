@@ -107,7 +107,6 @@ const NumberSafari = () => {
 
   const handleCorrectDrop = () => {
     if (currentRequestIndex < requests.length - 1) {
-
       handleRequestComplete()
     } else {
       console.log("Game Over!");

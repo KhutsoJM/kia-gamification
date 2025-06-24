@@ -44,7 +44,6 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                     onDrag={(e, info) => {
                         const { x, y } = info.point;
                         setPointerPosition({ x, y });
-
                         setDraggedFruit({
                             fruitType,
                             fruitImg,
