@@ -1,3 +1,4 @@
+// HOOKS
 import { useState, useEffect } from "react";
 
 // FRAMER MOTION
@@ -5,6 +6,13 @@ import { AnimatePresence } from "framer-motion";
 
 // MUI
 import { Box } from "@mui/material";
+
+// HOWLER
+import { Howl } from "howler";
+
+import clickSfx from '../../assets/FruitFall/sounds/click.wav';
+import emptyClickSfx from "../../assets/FruitFall/sounds/click-2.mp3";
+
 
 // COMPONENTS
 import AnimalRequest from "./components/AnimalRequest";
@@ -116,6 +124,17 @@ const FruitFall = () => {
 
     const [phase, setPhase] = useState("bubbleEntering");
 
+    // Sounds
+    const clickSound = new Howl({
+        src: [clickSfx],
+        volume: 0.6,
+    });
+
+    const emptyClickSound = new Howl({
+        src: [emptyClickSfx],
+        volume: 0.6,
+    });
+
     useEffect(() => {
         if (frustrationCount >= currentRequest.frustrationLimit) {
             console.log("Animal left!");
@@ -186,6 +205,7 @@ const FruitFall = () => {
     }
 
     const handleIncrement = (fruitType) => {
+        clickSound.play();
         setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] + 1)
@@ -193,6 +213,7 @@ const FruitFall = () => {
     }
 
     const handleDecrement = (fruitType) => {
+        fruitCounts[fruitType] === 0 ? emptyClickSound.play() : clickSound.play();
         setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] - 1)

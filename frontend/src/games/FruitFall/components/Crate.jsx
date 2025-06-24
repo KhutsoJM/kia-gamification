@@ -1,5 +1,10 @@
+// HOOKS
 import { useRef } from "react";
+
+// FRAMER MOTION
 import { motion } from "framer-motion";
+
+// MUI
 import { Box, Typography, IconButton } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
@@ -102,7 +107,6 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                 <IconButton
                     onClick={onDecrement}
                     size="small"
-                    disabled={fruitCount <= 0}
                     sx={{ p: 0.5 }}
                 >
                     <Remove fontSize="inherit" />

@@ -1,5 +1,14 @@
-import { Box } from "@mui/material";
+// FRAMER MOTION
 import { motion } from "framer-motion";
+
+// MUI
+import { Box } from "@mui/material";
+
+
+// SOUNDS
+import crateDrop from "../../../assets/FruitFall/sounds/drop-1.mp3";
+
+
 
 // COMPONENTS
 import Crate from "./Crate";
