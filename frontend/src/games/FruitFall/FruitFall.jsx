@@ -108,6 +108,9 @@ const FruitFall = () => {
         apple: 0,
     });
 
+    const [pointerPosition, setPointerPosition] = useState(null);
+    const [isDragging, setIsDragging] = useState(false);
+
     useEffect(() => {
         if (frustrationCount >= currentRequest.frustrationLimit) {
             console.log("Animal left!");
@@ -222,6 +225,8 @@ const FruitFall = () => {
                     request={currentRequest}
                     draggedFruit={draggedFruit}
                     handleDrop={handleDrop}
+                    pointerPosition={pointerPosition}
+                    isDragging={isDragging}
                 />
             </Box>
             <CrateRow
@@ -230,6 +235,8 @@ const FruitFall = () => {
                 handleIncrement={handleIncrement}
                 handleDecrement={handleDecrement}
                 setDraggedFruit={setDraggedFruit}
+                setPointerPosition={setPointerPosition}
+                setIsDragging={setIsDragging}
             />
         </Box>
     )

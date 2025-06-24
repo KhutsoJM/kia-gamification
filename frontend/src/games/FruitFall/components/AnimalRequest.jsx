@@ -6,7 +6,7 @@ import Animal from "./Animal";
 import Basket from "./Basket";
 
 
-const AnimalRequest = ({ request, draggedFruit, handleDrop }) => {
+const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging }) => {
 
     const {
         animalImg,
@@ -38,6 +38,8 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop }) => {
                     expectedAmount={amount}
                     draggedFruit={draggedFruit}
                     onDrop={handleDrop}
+                    pointerPosition={pointerPosition}
+                    isDragging={isDragging}
                 />
             </motion.div>
 

@@ -1,15 +1,17 @@
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Box, Typography, IconButton } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
 
-const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecrement, setDraggedFruit }) => {
+const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecrement, setDraggedFruit, setPointerPosition, setIsDragging }) => {
+
+    const fruitRef = useRef();
 
     return (
         <Box
             sx={{
                 position: "relative",
-                width: "128px",
                 width: {
                     xs: '64px',  // <600px screen
                     sm: '84px',  // >=600px
@@ -33,20 +35,28 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
 
             {fruitCount > 0 && (
                 <motion.img
+                    ref={fruitRef}
                     src={fruitImg}
                     alt={fruitType}
                     drag
                     dragSnapToOrigin
                     whileTap={{ scale: 1.2 }}
-                    onDragStart={() => setDraggedFruit(null)}
-                    onDragEnd={(e) => {
-                        const fruitRect = e.target.getBoundingClientRect();
+                    onDrag={(e, info) => {
+                        const { x, y } = info.point;
+                        setPointerPosition({ x, y });
+
                         setDraggedFruit({
                             fruitType,
                             fruitImg,
-                            fruitRect,
+                            fruitRef,
                             fruitCount,
                         });
+                    }}
+                    onDragStart={(e) => {
+                        setIsDragging(true);
+                    }}
+                    onDragEnd={() => {
+                        setIsDragging(false);
                     }}
                     style={{
                         position: "absolute",
