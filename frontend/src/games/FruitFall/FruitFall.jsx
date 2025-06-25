@@ -1,5 +1,5 @@
 // HOOKS
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // FRAMER MOTION
 import { AnimatePresence } from "framer-motion";
@@ -10,7 +10,7 @@ import { Box } from "@mui/material";
 // HOWLER
 import { Howl } from "howler";
 
-import clickSfx from '../../assets/FruitFall/sounds/click.wav';
+import clickSfx from '../../assets/FruitFall/sounds/click-1.wav';
 import emptyClickSfx from "../../assets/FruitFall/sounds/click-2.mp3";
 
 
@@ -47,6 +47,12 @@ import crateBlue from '../../assets/FruitFall/crates/crate-blue.png';
 import crateYellow from '../../assets/FruitFall/crates/crate-yellow.png';
 import cratePink from '../../assets/FruitFall/crates/crate-pink.png';
 import crateGreen from '../../assets/FruitFall/crates/crate-green.png';
+
+// coins
+import coinImg from "../../assets/FruitFall/props/coin.PNG";
+
+// sounds
+import bgMusic from "../../assets/sounds/bg-music.mp3";
 
 
 const levelOneConfig = [
@@ -134,6 +140,22 @@ const FruitFall = () => {
         src: [emptyClickSfx],
         volume: 0.6,
     });
+
+    const bgMusicSound = useRef();
+
+    useEffect(() => {
+        bgMusicSound.current = new Howl({
+            src: [bgMusic],
+            volume: 1,
+            preload: true,
+            loop: true,
+        });
+
+        setTimeout(() => {
+            bgMusicSound.current?.play();
+        }, 300);
+
+    }, []);
 
     useEffect(() => {
         if (frustrationCount >= currentRequest.frustrationLimit) {
@@ -241,6 +263,20 @@ const FruitFall = () => {
             }}
         >
             <Box
+                component="img"
+                src={coinImg}
+                alt="Coin"
+                
+                sx={{
+                    position: "absolute",
+                    top: "5%",
+                    right: "5%",
+                    width: "64px",
+                    zIndex: 10,
+                    pointerEvents: "none",
+                }}
+            />
+            <Box
                 sx={{
                     position: "relative",
                     width: "100%",
@@ -262,6 +298,7 @@ const FruitFall = () => {
                         isDragging={isDragging}
                         phase={phase}
                         setPhase={setPhase}
+                        frustrationCount={frustrationCount}
                     />
                 </AnimatePresence>
             </Box>

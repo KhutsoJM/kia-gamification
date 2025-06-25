@@ -1,5 +1,5 @@
 // HOOKS
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 // FRAMER MOTION
 import { motion } from "framer-motion";
@@ -8,10 +8,23 @@ import { motion } from "framer-motion";
 import { Box, Typography, IconButton } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
+// SOUNDS
+import popSfx from "../../../assets/FruitFall/sounds/pop-2.mp3";
+
 
 const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecrement, setDraggedFruit, setPointerPosition, setIsDragging }) => {
 
     const fruitRef = useRef();
+    const pickSound = useRef();
+
+    useEffect(() => {
+        pickSound.current = new Howl({
+            src: [popSfx],
+            volume: 0.4,
+            preload: true,
+            rate: 2,
+        });
+    })
 
     return (
         <Box
@@ -46,6 +59,9 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                     drag
                     dragSnapToOrigin
                     whileTap={{ scale: 1.2 }}
+                    onTapStart={() => {
+                        pickSound.current?.play();
+                    }}
                     onDrag={(e, info) => {
                         const { x, y } = info.point;
                         setPointerPosition({ x, y });

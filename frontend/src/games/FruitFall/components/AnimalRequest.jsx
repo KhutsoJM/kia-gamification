@@ -1,12 +1,21 @@
-import { motion } from "framer-motion";
+// REACT
+import { useRef, useEffect } from "react";
+
+// FRAMER MOTION
+import { motion, useAnimation } from "framer-motion";
+
+// MUI
 import { Box, Typography } from "@mui/material";
+
+// SOUNDS
+import speechBubbleSfx from "../../../assets/FruitFall/sounds/bubble-2.mp3";
 
 // COMPONENTS
 import Animal from "./Animal";
 import Basket from "./Basket";
 
 
-const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, phase, setPhase }) => {
+const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, phase, setPhase, frustrationCount }) => {
 
     const {
         animalImg,
@@ -17,6 +26,17 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
         expression,
     } = request;
 
+    const speechBubbleSound = useRef();
+
+    useEffect(() => {
+        speechBubbleSound.current = new Howl({
+            src: [speechBubbleSfx],
+            volume: 0.5,
+            preload: true,
+        });
+    }, []);
+
+
     return (
         <>
             {/* Animal + Basket container */}
@@ -25,7 +45,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                 animate={{ x: 0, opacity: 1 }}
                 transition={phase === "animalEntering" ?
                     { delay: 2.5, duration: 1, type: "spring", bounce: 0.3 }
-                    : { delay: 1.1, duration: 1, type: "spring", bounce: 0.3 }
+                    : { delay: 2.5, duration: 1.5, type: "spring", bounce: 0.3 }
                 }
                 exit={{ x: -500 }}
                 onAnimationComplete={() => {
@@ -42,7 +62,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     gap: "16px",
                 }}
             >
-                <Animal animalImg={animalImg} animalType={animalType} />
+                <Animal animalImg={animalImg} animalType={animalType} frustrationCount={frustrationCount} />
                 <Basket
                     expectedFruit={fruitType}
                     expectedAmount={amount}
@@ -57,17 +77,19 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                 initial={{ scale: 0, rotate: -60 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={
-                    phase === "bubbleEntering" ? { delay: 3, duration: 0.4 }
-                        : { delay: 2, duration: 0.3 }
+                    phase === "bubbleEntering" ?
+                        { delay: 4.4, duration: 0.4 }
+                        : { delay: 3, duration: 0.3 }
                 }
                 exit={{ scale: 0, rotate: -30 }}
                 onAnimationComplete={() => {
                     setPhase("animalEntering");
+                    speechBubbleSound.current?.play();
                 }}
                 style={{
                     position: "absolute",
-                    bottom: "16%",
-                    left: "12%",
+                    bottom: "20%",
+                    left: "10%",
                     background: "white",
                     borderRadius: "24px",
                     padding: "21px 42px",
