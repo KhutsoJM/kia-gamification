@@ -2,17 +2,20 @@
 import { useRef, useEffect } from "react";
 
 // FRAMER MOTION
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 
 // MUI
 import { Box, Typography } from "@mui/material";
 
-// SOUNDS
-import speechBubbleSfx from "../../../assets/FruitFall/sounds/bubble-2.mp3";
+// HOWLER
+import { Howl } from "howler";
 
 // COMPONENTS
 import Animal from "./Animal";
 import Basket from "./Basket";
+
+// SOUNDS
+import speechBubbleSfx from "../../../assets/FruitFall/sounds/pop-2.mp3";
 
 
 const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, phase, setPhase, frustrationCount }) => {
@@ -109,7 +112,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                 />
             </motion.div>
         </>
-    )
-}
+    );
+};
 
 export default AnimalRequest;
