@@ -1,21 +1,18 @@
 // REACT
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // FRAMER MOTION
 import { motion } from "framer-motion";
 
+import SoundManager from "../../../../utils/soundManager";
+
 // MUI
 import { Box, Typography } from "@mui/material";
-
-// HOWLER
-import { Howl } from "howler";
 
 // COMPONENTS
 import Animal from "./Animal";
 import Basket from "./Basket";
 
-// SOUNDS
-import speechBubbleSfx from "../../../assets/FruitFall/sounds/pop-2.mp3";
 
 
 const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, phase, setPhase, frustrationCount }) => {
@@ -30,26 +27,6 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
         sound,
     } = request;
 
-    const speechBubbleSound = useRef();
-    const animalSound = useRef();
-
-    useEffect(() => {
-        speechBubbleSound.current = new Howl({
-            src: [speechBubbleSfx],
-            volume: 0.5,
-            preload: true,
-        });
-    }, []);
-
-    useEffect(() => {
-        animalSound.current = new Howl({
-            src: [sound],
-            volume: 1,
-            rate: 1,
-            preload: true,
-        });
-    }, []);
-
 
     return (
         <>
@@ -58,15 +35,14 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                 initial={{ x: -500, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={phase === "animalEntering" ?
-                    { delay: 2.5, duration: 1, type: "spring", bounce: 0.3 }
-                    : { delay: 2.5, duration: 1.5, type: "spring", bounce: 0.3 }
+                    { delay: 2.5, duration: 1, type: "spring", bounce: 0.3 } :
+                    { delay: 2.5, duration: 1.5, type: "spring", bounce: 0.3 }
                 }
                 exit={{ x: -500 }}
                 onAnimationComplete={() => {
                     setPhase("bubbleExiting");
                     phase === "bubbleExiting" && setPhase("bubbleEntering");
-                    console.log(phase)
-                    animalSound.current?.play();
+                    SoundManager.play("animals", "parrot");
                 }}
                 style={{
                     position: "absolute",
@@ -99,7 +75,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                 exit={{ scale: 0, rotate: -30 }}
                 onAnimationComplete={() => {
                     setPhase("animalEntering");
-                    speechBubbleSound.current?.play();
+                    SoundManager.play("sfx", "pop");
                 }}
                 style={{
                     position: "absolute",

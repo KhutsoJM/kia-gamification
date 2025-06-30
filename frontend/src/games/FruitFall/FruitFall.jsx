@@ -7,12 +7,6 @@ import { AnimatePresence } from "framer-motion";
 // MUI
 import { Box } from "@mui/material";
 
-// HOWLER
-import { Howl } from "howler";
-
-import clickSfx from '../../assets/FruitFall/sounds/click-1.wav';
-import emptyClickSfx from "../../assets/FruitFall/sounds/click-2.mp3";
-
 
 // COMPONENTS
 import AnimalRequest from "./components/AnimalRequest";
@@ -52,7 +46,6 @@ import crateGreen from '../../assets/FruitFall/crates/crate-green.png';
 import coinImg from "../../assets/FruitFall/props/coin.PNG";
 
 // sounds
-import bgMusic from "../../assets/sounds/bg-music.mp3";
 import birdSquawkSfx from "../../assets/FruitFall/sounds/animals/bird-squawk.mp3";
 
 import SoundManager from "../../../utils/soundManager";
@@ -116,7 +109,7 @@ const levelOneConfig = [
 
 const FruitFall = () => {
     SoundManager.loadSounds();
-    
+
     const level = levelOneConfig[0];
     const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
     const [animalsLost, setAnimalsLost] = useState([]);
@@ -138,31 +131,9 @@ const FruitFall = () => {
 
     const [phase, setPhase] = useState("bubbleEntering");
 
-    // Sounds
-    const clickSound = new Howl({
-        src: [clickSfx],
-        volume: 0.6,
-    });
-
-    const emptyClickSound = new Howl({
-        src: [emptyClickSfx],
-        volume: 0.6,
-    });
-
-    const bgMusicSound = useRef();
 
     useEffect(() => {
-        bgMusicSound.current = new Howl({
-            src: [bgMusic],
-            volume: 1,
-            preload: true,
-            loop: true,
-        });
-
-        setTimeout(() => {
-            bgMusicSound.current?.play();
-        }, 300);
-
+        SoundManager.play("music", "bgMusic");
     }, []);
 
     useEffect(() => {
@@ -179,9 +150,7 @@ const FruitFall = () => {
         }
     }, [frustrationCount]);
 
-
     const currentRequest = level.requestPool[currentRequestIndex];
-
 
     const handleDrop = (droppedFruitType, droppedAmount) => {
         console.log(`Fruit Dropped: ${droppedFruitType}, Amount: ${droppedAmount}`);
@@ -234,24 +203,23 @@ const FruitFall = () => {
         })
     }
 
-    const handleIncrement = (fruitType) => {
-        // clickSound.play();
-        setFruitCounts(prev => ({
-            ...prev,
-            [fruitType]: Math.max(0, prev[fruitType] + 1)
-        }))
+    const updateFruitCount = (fruitType, delta) => {
 
-        SoundManager.play("ui", 'click');
-    }
+        setFruitCounts(prev => {
+            const newCount = Math.max(0, prev[fruitType] + delta);
 
-    const handleDecrement = (fruitType) => {
-        // fruitCounts[fruitType] === 0 ? emptyClickSound.play() : clickSound.play();
-        setFruitCounts(prev => ({
-            ...prev,
-            [fruitType]: Math.max(0, prev[fruitType] - 1)
-        }));
+            // Handle sound
+            if (delta > 0) {
+                SoundManager.play("sfx", "click");
+            } else {
+                SoundManager.play("sfx", newCount === 0 ? "emptyClick" : "click");
+            }
 
-        SoundManager.play("ui", 'click');
+            return {
+                ...prev,
+                [fruitType]: newCount
+            };
+        });
     }
 
     const handleNextRequest = () => {
@@ -317,11 +285,10 @@ const FruitFall = () => {
             <CrateRow
                 crates={level.cratesData}
                 fruitCounts={fruitCounts}
-                handleIncrement={handleIncrement}
-                handleDecrement={handleDecrement}
                 setDraggedFruit={setDraggedFruit}
                 setPointerPosition={setPointerPosition}
                 setIsDragging={setIsDragging}
+                onUpdateFruitCount={updateFruitCount}
             />
         </Box>
     )

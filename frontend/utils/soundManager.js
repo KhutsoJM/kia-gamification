@@ -1,36 +1,14 @@
 import { Howl } from "howler";
 
-// Object to store and manage all sounds
-// const sounds = {    
-//     bgMusic: new Howl({
-//         src: [require("../src/assets/FruitFall/sounds/nature-ambience.mp3")],
-//         loop: true,
-//         volume: 1,
-//         preload: true,
-//     }),
-
-//     click: new Howl({
-//         src: [require("../src/assets/FruitFall/sounds/click-2.mp3")],
-//         volume: 0.6,
-//     }),
-
-//     emptyClick: new Howl({
-//         src: [require("../src/assets/FruitFall/sounds/click-1.wav")],
-//         volume: 0.6,
-//     }),
-
-//     bubble: new Howl({
-//         src: [require("../src/assets/FruitFall/sounds/bubble-1.mp3")],
-//         volume: 0.6,
-//     }),
-// }
 
 const soundMap = {
     ui: {
         error: "../src/assets/FruitFall/sounds/bubble-1.mp3",
     },
     music: {
-        bg: "../src/assets/FruitFall/sounds/nature-ambience.mp3",
+        bgAmbience: "../src/assets/FruitFall/sounds/nature-ambience.mp3",
+        bgMusic: "../src/assets/sounds/bg-music.mp3",
+
     },
     animals: {
         parrot: "../src/assets/FruitFall/sounds/animals/bird-squawk.mp3",
@@ -38,9 +16,10 @@ const soundMap = {
     sfx: {
         click: "../src/assets/FruitFall/sounds/click-1.wav",
         emptyClick: "../src/assets/FruitFall/sounds/click-2.mp3",
+        pop: "../src/assets/FruitFall/sounds/pop-2.mp3",
+        drop: "../src/assets/FruitFall/sounds/drop-2.mp3",
     }
 }
-
 
 const sounds = {};
 
@@ -61,7 +40,6 @@ const loadSounds = () => {
     }
 }
 
-
 const play = (category, name) => {
     const sound = sounds?.[category]?.[name];
     if (sound) {
@@ -71,18 +49,20 @@ const play = (category, name) => {
     }
 }
 
-
 const stop = (category, name) => {
     const sound = sounds?.[category]?.[name];
     if (sound) sound.stop();
 }
-
 
 const setVolume = (category, name, volume) => {
     const sound = sounds?.[category]?.[name];
     if (sound) sound.volume(volume);
 }
 
+const setRate = (category, name, volume) => {
+    const sound = sounds?.[category]?.[name];
+    if (sound) sound.rate(volume);
+}
 
 const muteCategory = (category, mute = true) => {
     if (sounds?.[category]) {
@@ -92,12 +72,12 @@ const muteCategory = (category, mute = true) => {
     }
 }
 
-
 const SoundManager = {
     loadSounds,
     play,
     stop,
     setVolume,
+    setRate,
     muteCategory,
 };
 

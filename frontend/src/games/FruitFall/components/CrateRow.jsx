@@ -4,31 +4,22 @@ import { useEffect, useRef } from "react";
 // FRAMER MOTION
 import { motion } from "framer-motion";
 
-// HOWLER
-import { Howl } from "howler";
+import SoundManager from "../../../../utils/soundManager";
 
 // MUI
 import { Box } from "@mui/material";
-
-// SOUNDS
-import crateDropSfx from "../../../assets/FruitFall/sounds/drop-1.mp3";
-import drop2Sfx from "../../../assets/FruitFall/sounds/drop-2.mp3";
 
 // COMPONENTS
 import Crate from "./Crate";
 
 
-const CrateRow = ({ crates, fruitCounts, handleIncrement, handleDecrement, setDraggedFruit, setPointerPosition, setIsDragging }) => {
+const CrateRow = ({ crates, fruitCounts, onUpdateFruitCount, setDraggedFruit, setPointerPosition, setIsDragging }) => {
 
     const crateDropSound = useRef();
     const crateDelay = 0.7;
 
     useEffect(() => {
-        crateDropSound.current = new Howl({
-            src: [drop2Sfx],
-            volume: 0.5,
-            preload: true,
-        });
+        SoundManager.setVolume("sfx", "drop", 0.5);
     }, []);
 
     return (
@@ -47,7 +38,7 @@ const CrateRow = ({ crates, fruitCounts, handleIncrement, handleDecrement, setDr
 
                 useEffect(() => {
                     const timer = setTimeout(() => {
-                        crateDropSound.current?.play();
+                        SoundManager.play("sfx", "drop");
                     }, dropSoundDelay);
                     return () => clearTimeout(timer);
                 }, []);
@@ -70,11 +61,10 @@ const CrateRow = ({ crates, fruitCounts, handleIncrement, handleDecrement, setDr
                             fruitImg={crate.fruitImg}
                             fruitType={crate.fruitType}
                             fruitCount={fruitCounts[crate.fruitType] || 0}
-                            onIncrement={() => handleIncrement(crate.fruitType)}
-                            onDecrement={() => handleDecrement(crate.fruitType)}
                             setDraggedFruit={setDraggedFruit}
                             setPointerPosition={setPointerPosition}
                             setIsDragging={setIsDragging}
+                            onUpdateFruitCount={onUpdateFruitCount}
                         />
                     </motion.div>
                 )

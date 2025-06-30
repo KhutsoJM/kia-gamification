@@ -4,26 +4,22 @@ import { useRef, useEffect } from "react";
 // FRAMER MOTION
 import { motion } from "framer-motion";
 
+import SoundManager from "../../../../utils/soundManager";
+
 // MUI
 import { Box, Typography, IconButton } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
-// SOUNDS
-import popSfx from "../../../assets/FruitFall/sounds/pop-2.mp3";
 
 
-const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecrement, setDraggedFruit, setPointerPosition, setIsDragging }) => {
+const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onUpdateFruitCount, setDraggedFruit, setPointerPosition, setIsDragging }) => {
 
     const fruitRef = useRef();
     const pickSound = useRef();
 
     useEffect(() => {
-        pickSound.current = new Howl({
-            src: [popSfx],
-            volume: 0.4,
-            preload: true,
-            rate: 2,
-        });
+        SoundManager.setRate("sfx", "pop", 2);
+        SoundManager.setVolume("sfx", "pop", 0.4);
     })
 
     return (
@@ -60,7 +56,7 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                     dragSnapToOrigin
                     whileTap={{ scale: 1.2 }}
                     onTapStart={() => {
-                        pickSound.current?.play();
+                        SoundManager.play("sfx", "pop");
                     }}
                     onDrag={(e, info) => {
                         const { x, y } = info.point;
@@ -121,7 +117,7 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                 }}
             >
                 <IconButton
-                    onClick={onDecrement}
+                    onClick={() => onUpdateFruitCount(fruitType, -1)}
                     size="small"
                     sx={{ p: 0.5 }}
                 >
@@ -133,7 +129,7 @@ const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onIncrement, onDecre
                 </Typography>
 
                 <IconButton
-                    onClick={onIncrement}
+                    onClick={() => onUpdateFruitCount(fruitType, 1)}
                     size="small"
                     sx={{ p: 0.5 }}
                 >
