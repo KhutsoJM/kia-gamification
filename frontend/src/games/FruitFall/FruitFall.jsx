@@ -53,6 +53,9 @@ import coinImg from "../../assets/FruitFall/props/coin.PNG";
 
 // sounds
 import bgMusic from "../../assets/sounds/bg-music.mp3";
+import birdSquawkSfx from "../../assets/FruitFall/sounds/animals/bird-squawk.mp3";
+
+import SoundManager from "../../../utils/soundManager";
 
 
 const levelOneConfig = [
@@ -68,6 +71,7 @@ const levelOneConfig = [
                 amount: 3,
                 frustrationLimit: 3,
                 expression: "6 - 3",
+                sound: birdSquawkSfx,
             },
             {
                 animalType: "parrot",
@@ -77,6 +81,7 @@ const levelOneConfig = [
                 amount: 4,
                 frustrationLimit: 3,
                 expression: "5 - 1",
+                sound: birdSquawkSfx,
             },
             {
                 animalType: "rabbit",
@@ -86,6 +91,7 @@ const levelOneConfig = [
                 amount: 1,
                 frustrationLimit: 3,
                 expression: "4 - 3",
+                sound: birdSquawkSfx,
             },
         ],
         cratesData: [
@@ -109,6 +115,8 @@ const levelOneConfig = [
 ]
 
 const FruitFall = () => {
+    SoundManager.loadSounds();
+    
     const level = levelOneConfig[0];
     const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
     const [animalsLost, setAnimalsLost] = useState([]);
@@ -227,19 +235,23 @@ const FruitFall = () => {
     }
 
     const handleIncrement = (fruitType) => {
-        clickSound.play();
+        // clickSound.play();
         setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] + 1)
         }))
+
+        SoundManager.play("ui", 'click');
     }
 
     const handleDecrement = (fruitType) => {
-        fruitCounts[fruitType] === 0 ? emptyClickSound.play() : clickSound.play();
+        // fruitCounts[fruitType] === 0 ? emptyClickSound.play() : clickSound.play();
         setFruitCounts(prev => ({
             ...prev,
             [fruitType]: Math.max(0, prev[fruitType] - 1)
-        }))
+        }));
+
+        SoundManager.play("ui", 'click');
     }
 
     const handleNextRequest = () => {
@@ -266,7 +278,7 @@ const FruitFall = () => {
                 component="img"
                 src={coinImg}
                 alt="Coin"
-                
+
                 sx={{
                     position: "absolute",
                     top: "5%",

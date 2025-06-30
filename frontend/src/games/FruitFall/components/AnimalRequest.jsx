@@ -27,14 +27,25 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
         fruitType,
         amount,
         expression,
+        sound,
     } = request;
 
     const speechBubbleSound = useRef();
+    const animalSound = useRef();
 
     useEffect(() => {
         speechBubbleSound.current = new Howl({
             src: [speechBubbleSfx],
             volume: 0.5,
+            preload: true,
+        });
+    }, []);
+
+    useEffect(() => {
+        animalSound.current = new Howl({
+            src: [sound],
+            volume: 1,
+            rate: 1,
             preload: true,
         });
     }, []);
@@ -55,6 +66,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     setPhase("bubbleExiting");
                     phase === "bubbleExiting" && setPhase("bubbleEntering");
                     console.log(phase)
+                    animalSound.current?.play();
                 }}
                 style={{
                     position: "absolute",
