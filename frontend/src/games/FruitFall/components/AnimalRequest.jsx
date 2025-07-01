@@ -15,7 +15,7 @@ import Basket from "./Basket";
 
 
 
-const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, phase, setPhase, frustrationCount }) => {
+const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isDragging, animationStep, onNextAnimation, frustrationCount }) => {
 
     const {
         animalImg,
@@ -27,22 +27,39 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
         sound,
     } = request;
 
+    const quickEntry = (animationStep.startsWith("QUICK_") || animationStep.includes("EXIT"))
+    const animalEntry = quickEntry ? 0.5 : 2;
+    const speechBubbleEntry = quickEntry ? 1 : 3.5;
+
 
     return (
         <>
             {/* Animal + Basket container */}
-            <motion.div
+            {(animationStep?.includes("ANIMAL_") || animationStep?.includes("SPEECH_BUBBLE")) && (<motion.div
                 initial={{ x: -500, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={phase === "animalEntering" ?
-                    { delay: 2.5, duration: 1, type: "spring", bounce: 0.3 } :
-                    { delay: 2.5, duration: 1.5, type: "spring", bounce: 0.3 }
-                }
-                exit={{ x: -500 }}
+                transition={{
+                    delay: animalEntry,
+                    duration: 1.2,
+                    type: "spring",
+                    bounce: 0.3,
+                }}
+                exit={{
+                    x: -500,
+                    transition: {
+                        delay: 3,
+                        duration: 1.2,
+                        type: "spring",
+                        bounce: 0.3,
+                    }
+                }}
                 onAnimationComplete={() => {
-                    setPhase("bubbleExiting");
-                    phase === "bubbleExiting" && setPhase("bubbleEntering");
-                    SoundManager.play("animals", "parrot");
+                    if (animationStep === "ANIMAL_ENTRY" || animationStep === "QUICK_ANIMAL_ENTRY") {
+                        onNextAnimation();
+                        setTimeout(() => {
+                            SoundManager.play("animals", request.sound);
+                        }, 2500);
+                    }
                 }}
                 style={{
                     position: "absolute",
@@ -62,19 +79,15 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     pointerPosition={pointerPosition}
                     isDragging={isDragging}
                 />
-            </motion.div>
+            </motion.div>)}
             {/* Speech bubble */}
-            <motion.div
+            {(animationStep?.includes("SPEECH_BUBBLE") || animationStep?.includes("ANIMAL_")) && (<motion.div
                 initial={{ scale: 0, rotate: -60 }}
                 animate={{ scale: 1, rotate: 0 }}
-                transition={
-                    phase === "bubbleEntering" ?
-                        { delay: 4.4, duration: 0.4 }
-                        : { delay: 3, duration: 0.3 }
-                }
+                transition={{ delay: speechBubbleEntry, duration: 0.3 }}
                 exit={{ scale: 0, rotate: -30 }}
                 onAnimationComplete={() => {
-                    setPhase("animalEntering");
+                    onNextAnimation();
                     SoundManager.play("sfx", "pop");
                 }}
                 style={{
@@ -98,7 +111,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     alt={fruitType}
                     sx={{ width: 24, height: 24 }}
                 />
-            </motion.div>
+            </motion.div>)}
         </>
     );
 };

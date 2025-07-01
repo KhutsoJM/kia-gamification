@@ -13,7 +13,7 @@ import { Box } from "@mui/material";
 import Crate from "./Crate";
 
 
-const CrateRow = ({ crates, fruitCounts, onUpdateFruitCount, setDraggedFruit, setPointerPosition, setIsDragging }) => {
+const CrateRow = ({ crates, fruitCounts, onUpdateFruitCount, setDraggedFruit, setPointerPosition, setIsDragging, onNextAnimation }) => {
 
     const crateDropSound = useRef();
     const crateDelay = 0.7;
@@ -54,6 +54,9 @@ const CrateRow = ({ crates, fruitCounts, onUpdateFruitCount, setDraggedFruit, se
                             duration: 0.6,
                             type: "spring",
                             bounce: 0.4,
+                        }}
+                        onAnimationComplete={() => {
+                            crates.length - 1 === index && onNextAnimation();
                         }}
                     >
                         <Crate

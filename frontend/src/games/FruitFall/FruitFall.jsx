@@ -2,10 +2,13 @@
 import { useState, useEffect, useRef } from "react";
 
 // FRAMER MOTION
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 // MUI
-import { Box } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { Pause } from '@mui/icons-material';
+
+const MotionButton = motion(Button);
 
 
 // COMPONENTS
@@ -46,8 +49,6 @@ import crateGreen from '../../assets/FruitFall/crates/crate-green.png';
 import coinImg from "../../assets/FruitFall/props/coin.PNG";
 
 // sounds
-import birdSquawkSfx from "../../assets/FruitFall/sounds/animals/bird-squawk.mp3";
-
 import SoundManager from "../../../utils/soundManager";
 
 
@@ -64,7 +65,7 @@ const levelOneConfig = [
                 amount: 3,
                 frustrationLimit: 3,
                 expression: "6 - 3",
-                sound: birdSquawkSfx,
+                sound: "giraffeGrunt",
             },
             {
                 animalType: "parrot",
@@ -74,7 +75,7 @@ const levelOneConfig = [
                 amount: 4,
                 frustrationLimit: 3,
                 expression: "5 - 1",
-                sound: birdSquawkSfx,
+                sound: "parrotSquawk",
             },
             {
                 animalType: "rabbit",
@@ -84,7 +85,7 @@ const levelOneConfig = [
                 amount: 1,
                 frustrationLimit: 3,
                 expression: "4 - 3",
-                sound: birdSquawkSfx,
+                sound: "parrotSquawk",
             },
         ],
         cratesData: [
@@ -107,6 +108,32 @@ const levelOneConfig = [
     }
 ]
 
+const ANIMATIONS = {
+    CRATES_ENTRY: "CRATES_ENTRY",
+    ANIMAL_ENTRY: "ANIMAL_ENTRY",
+    QUICK_ANIMAL_ENTRY: "QUICK_ANIMAL_ENTRY",
+    ANIMAL_EXIT: "ANIMAL_EXIT",
+    SPEECH_BUBBLE_ENTRY: "SPEECH_BUBBLE_ENTRY",
+    QUICK_SPEECH_BUBBLE_ENTRY: "QUICK_SPEECH_BUBBLE_ENTRY",
+    QUICK_SPEECH_BUBBLE_EXIT: "SPEECH_BUBBLE_EXIT",
+    NEXT_REQUEST: "NEXT_REQUEST",
+}
+
+const SEQUENCES = {
+    INITIAL: [
+        ANIMATIONS.CRATES_ENTRY,
+        ANIMATIONS.ANIMAL_ENTRY,
+        ANIMATIONS.SPEECH_BUBBLE_ENTRY,
+    ],
+    LOOP: [
+        ANIMATIONS.QUICK_SPEECH_BUBBLE_EXIT,
+        ANIMATIONS.ANIMAL_EXIT,
+        ANIMATIONS.QUICK_SPEECH_BUBBLE_ENTRY,
+        ANIMATIONS.QUICK_ANIMAL_ENTRY,
+    ],
+}
+
+
 const FruitFall = () => {
     SoundManager.loadSounds();
 
@@ -114,6 +141,9 @@ const FruitFall = () => {
     const [currentRequestIndex, setCurrentRequestIndex] = useState(0);
     const [animalsLost, setAnimalsLost] = useState([]);
     const [frustrationCount, setFrustrationCount] = useState(0);
+    const [isLevelComplete, setIsLevelComplete] = useState(false);
+
+    const [isPaused, setIsPaused] = useState(false);
 
     const [draggedFruit, setDraggedFruit] = useState({
         fruitType: '',
@@ -129,11 +159,32 @@ const FruitFall = () => {
     const [pointerPosition, setPointerPosition] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    const [phase, setPhase] = useState("bubbleEntering");
+    // ANIMATIONS
+    const animationIndexRef = useRef(0);
+    const [sequenceName, setSequenceName] = useState("INITIAL");
+    const [animationStep, setAnimationStep] = useState(SEQUENCES.INITIAL[0]);
+
+    useEffect(() => {
+        console.log("ANIMATION STEP:", animationStep);
+    }, [animationStep]);
 
 
     useEffect(() => {
         SoundManager.play("music", "bgMusic");
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+                setIsPaused(prev => !prev);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
     }, []);
 
     useEffect(() => {
@@ -152,9 +203,35 @@ const FruitFall = () => {
 
     const currentRequest = level.requestPool[currentRequestIndex];
 
+    const handlePauseClick = () => {
+        setIsPaused(paused => !paused);
+        SoundManager.play("sfx", "pop");
+    }
+
+    const handleNextAnimationStep = () => {
+        const currentSequence = SEQUENCES[sequenceName];
+
+        animationIndexRef.current++;
+
+        if (animationIndexRef.current < currentSequence.length) {
+            console.log("next animation");
+            setAnimationStep(currentSequence[animationIndexRef.current]);
+        } else {
+            if (sequenceName === "INITIAL") {
+                console.log("changing to looping sequence animations");
+                setSequenceName("LOOP");
+                animationIndexRef.current = 0;
+                setAnimationStep(SEQUENCES.LOOP[0]);
+            } else {
+                console.log("reseting loop");
+                animationIndexRef.current = 0;
+                setAnimationStep(SEQUENCES.LOOP[0]);
+            }
+        }
+    }
+
     const handleDrop = (droppedFruitType, droppedAmount) => {
         console.log(`Fruit Dropped: ${droppedFruitType}, Amount: ${droppedAmount}`);
-        // handles fruit drop
 
         const isCorrect = (
             droppedFruitType === currentRequest.fruitType &&
@@ -163,7 +240,6 @@ const FruitFall = () => {
 
         if (isCorrect) {
             handleCorrectMatch(droppedFruitType);
-
         } else {
             handleIncorrectMatch(droppedFruitType);
         }
@@ -185,6 +261,9 @@ const FruitFall = () => {
             handleNextRequest();
         } else {
             console.log("🎉 Level complete!");
+            setTimeout(() => {
+                setIsLevelComplete(true);
+            }, 2000);
             // TODO: Handle level completion (score, stars, etc)
         }
     }
@@ -229,6 +308,43 @@ const FruitFall = () => {
     }
 
 
+
+    if (isLevelComplete) {
+        return (
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    backgroundColor: "rgba(0,0,0,0.75)",
+                    zIndex: 2000,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    color: "white",
+                }}
+            >
+                <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, type: "spring", bounce: 0.4 }}
+                    style={{ background: "#ffffff", color: "#333", padding: "36px", borderRadius: "16px", textAlign: "center" }}
+                >
+                    <Typography variant="h4" sx={{ mb: 2 }}>Level Complete!</Typography>
+                    <Typography variant="body1" sx={{ mb: 2 }}>You helped all the animals 🎉</Typography>
+                    {/* Optional: stars, coins, etc */}
+                    <Button variant="contained" onClick={() => window.location.reload()}>
+                        Restart
+                    </Button>
+                </motion.div>
+            </Box>
+        )
+    }
+
+
     return (
         <Box
             sx={{
@@ -242,7 +358,8 @@ const FruitFall = () => {
                 backgroundPosition: "center",
             }}
         >
-            <Box
+            {/* COIN IMAGE */}
+            {/* <Box
                 component="img"
                 src={coinImg}
                 alt="Coin"
@@ -255,7 +372,72 @@ const FruitFall = () => {
                     zIndex: 10,
                     pointerEvents: "none",
                 }}
-            />
+            /> */}
+            <AnimatePresence>
+                {isPaused && (
+                    <Box
+                        sx={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100vw',
+                            height: '100vh',
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            zIndex: 1000,
+                        }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0 }}
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                backgroundColor: 'white',
+                                padding: '36px',
+                                borderRadius: '16px',
+                            }}
+                        >
+                            <Typography variant="h4">Game Paused</Typography>
+                            <Button onClick={handlePauseClick} sx={{ mt: 1 }}>Resume</Button>
+                            <Button sx={{ mt: 0.5 }}>Main Menu</Button>
+                            <Button sx={{ mt: 0.5 }}>Settings</Button>
+                            <Button sx={{ mt: 0.5 }}>Logout</Button>
+                        </motion.div>
+                    </Box>
+                )}
+            </AnimatePresence>
+
+            <MotionButton
+                onClick={handlePauseClick}
+                variant="outlined"
+                color="primary"
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "absolute",
+                    top: "5%",
+                    right: "5%",
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    padding: 0,
+                    minWidth: 0,
+                    zIndex: 100,
+                }}
+                initial={{ scale: 1 }}
+                whileHover={{ scale: 1.2 }}  // use a smaller scale so it looks natural
+                whileTap={{ scale: 0.95 }}    // add tap feedback
+            >
+                <Pause fontSize="large" />
+            </MotionButton>
             <Box
                 sx={{
                     position: "relative",
@@ -276,9 +458,9 @@ const FruitFall = () => {
                         handleDrop={handleDrop}
                         pointerPosition={pointerPosition}
                         isDragging={isDragging}
-                        phase={phase}
-                        setPhase={setPhase}
+                        animationStep={animationStep}
                         frustrationCount={frustrationCount}
+                        onNextAnimation={handleNextAnimationStep}
                     />
                 </AnimatePresence>
             </Box>
@@ -289,6 +471,7 @@ const FruitFall = () => {
                 setPointerPosition={setPointerPosition}
                 setIsDragging={setIsDragging}
                 onUpdateFruitCount={updateFruitCount}
+                onNextAnimation={handleNextAnimationStep}
             />
         </Box>
     )

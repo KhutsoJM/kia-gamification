@@ -4,6 +4,7 @@ import { Howl } from "howler";
 const soundMap = {
     ui: {
         error: "../src/assets/FruitFall/sounds/bubble-1.mp3",
+        menu: "../src/assets/FruitFall/sounds/pop-2.mp3",
     },
     music: {
         bgAmbience: "../src/assets/FruitFall/sounds/nature-ambience.mp3",
@@ -11,7 +12,8 @@ const soundMap = {
 
     },
     animals: {
-        parrot: "../src/assets/FruitFall/sounds/animals/bird-squawk.mp3",
+        parrotSquawk: "../src/assets/FruitFall/sounds/animals/bird-squawk.mp3",
+        giraffeGrunt: "../src/assets/FruitFall/sounds/animals/giraffe-grunt.mp3",
     },
     sfx: {
         click: "../src/assets/FruitFall/sounds/click-1.wav",

@@ -15,7 +15,6 @@ import { Add, Remove } from "@mui/icons-material";
 const Crate = ({ crateImg, fruitImg, fruitType, fruitCount, onUpdateFruitCount, setDraggedFruit, setPointerPosition, setIsDragging }) => {
 
     const fruitRef = useRef();
-    const pickSound = useRef();
 
     useEffect(() => {
         SoundManager.setRate("sfx", "pop", 2);
