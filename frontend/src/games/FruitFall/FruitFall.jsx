@@ -15,6 +15,7 @@ const MotionButton = motion(Button);
 import AnimalRequest from "./components/AnimalRequest";
 import Basket from "./components/Basket";
 import CrateRow from "./components/CrateRow";
+import Scene from "./components/Scene";
 
 
 // ASSETS
@@ -358,6 +359,7 @@ const FruitFall = () => {
                 backgroundPosition: "center",
             }}
         >
+            <Scene />
             {/* COIN IMAGE */}
             {/* <Box
                 component="img"

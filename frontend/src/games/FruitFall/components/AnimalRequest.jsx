@@ -101,7 +101,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     display: "flex",
                     alignItems: "center",
                     gap: 8,
-                    zIndex: 10,
+                    zIndex: 35,
                 }}
             >
                 <Typography variant="body1">{expression}</Typography>
@@ -110,6 +110,7 @@ const AnimalRequest = ({ request, draggedFruit, handleDrop, pointerPosition, isD
                     src={fruitImg}
                     alt={fruitType}
                     sx={{ width: 24, height: 24 }}
+                    zIndex={40}
                 />
             </motion.div>)}
         </>

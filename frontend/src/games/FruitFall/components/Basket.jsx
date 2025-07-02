@@ -27,7 +27,7 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
     const controls = useAnimation();
 
     const wrongFruit = useRef();
-    
+
     useEffect(() => {
         wrongFruit.current = new Howl({
             src: [wrongFruitSfx],
@@ -105,6 +105,7 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
                 // onDrop={handleDropLogic}
                 onDragOver={(e) => e.preventDefault()}
                 draggable={false}
+                zIndex={50}
                 sx={{
                     width: "clamp(60px, 10vw, 96px)",
                     height: "auto",
@@ -114,11 +115,11 @@ const Basket = ({ expectedFruit, expectedAmount, draggedFruit, onDrop, pointerPo
                     // filter: isHovering && "drop-shadow(0 0 8px rgba(170, 208, 175, 0.8))",
                     filter:
                         isHovering ?
-                            "drop-shadow(0 0 16px rgba(170, 208, 175, 0.8))"
-                            : showFeedback ?
+                            "drop-shadow(0 0 16px rgba(170, 208, 175, 0.8))" :
+                            showFeedback ?
                                 isCorrectDrop ?
-                                    "drop-shadow(0 0 16px rgba(35, 178, 58, 0.8))"
-                                    : "drop-shadow(0 0 16px rgba(181, 49, 49, 0.8))"
+                                    "drop-shadow(0 0 16px rgba(35, 178, 58, 0.8))" :
+                                    "drop-shadow(0 0 16px rgba(181, 49, 49, 0.8))"
                                 : null
                 }}
             />

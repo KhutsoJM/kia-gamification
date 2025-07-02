@@ -62,6 +62,7 @@ const Animal = ({ animalImg, animalType, frustrationCount }) => {
         alt={animalType}
         draggable={false}
         sx={{ width: "100%", height: "auto" }}
+        zIndex={50}
       />
 
       <AnimatePresence>
