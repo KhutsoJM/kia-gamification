@@ -2,6 +2,7 @@ import { Box } from "@mui/material"
 import Fruit from "./Fruit"
 
 export default function FruitRow({ fruits, fruitCounts, onAdd, onRemove }) {
+
     return (
         <Box
             display="flex"

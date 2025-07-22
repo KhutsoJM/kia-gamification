@@ -1,5 +1,5 @@
 // REACT
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // MUI
 import { Box, Button, Typography, IconButton } from "@mui/material";
@@ -122,6 +122,44 @@ export default function FruitFall() {
         }))
     }
 
+    const handleDrop = (fruitRef, fruitType) => {
+        if (!fruitRef.current || !basketRef.current) return;
+
+        const fruitRect = fruitRef.current.getBoundingClientRect();
+        const basketRect = basketRef.current.getBoundingClientRect();
+
+        const isIntersecting =
+            fruitRect.left < basketRect.right &&
+            fruitRect.right > basketRect.left &&
+            fruitRect.top < basketRect.bottom &&
+            fruitRect.bottom > basketRect.top;
+
+        if (isIntersecting) {
+            const expectedFruit = animalRequest.fruitType;
+            const correctAmount = eval(animalRequest.expression);
+
+            if (fruitType === expectedFruit) {
+                setFruitCount(prev => ({
+                    ...prev,
+                    [fruitType]: prev[fruitType] + 1,
+                }));
+            }
+
+            console.log("Dropped the correct fruit!")
+
+            if (fruitCounts[fruitType] + 1 === correctAmount) {
+                alert("Great job!");
+                // Move to next animal or level
+                setCurrentAnimalIndex(prev => (prev + 1) % levelOneConfig[0].requestPool.length);
+                // Reset counts
+                setFruitCount({});
+            }
+        } else {
+            alert("Wrong Fruit!");
+        }
+
+    }
+
 
     return (
         <Box
@@ -162,12 +200,12 @@ export default function FruitFall() {
                 </Box>
 
                 {/* Fruit Row: Displays all the fruits */}
-                    <FruitRow
-                        fruits={fruitData}
-                        fruitCounts={fruitCounts}
-                        onAdd={handleAdd}
-                        onRemove={handleRemove}
-                    />
+                <FruitRow
+                    fruits={fruitData}
+                    fruitCounts={fruitCounts}
+                    onAdd={handleAdd}
+                    onRemove={handleRemove}
+                />
             </Box>
 
             <Button
