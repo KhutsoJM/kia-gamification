@@ -97,6 +97,11 @@ export default function FruitFall() {
     const [currentAnimalIndex, setCurrentAnimalIndex] = useState(0);
     const animalRequest = levelOneConfig[0].requestPool[currentAnimalIndex];
 
+    const basketRef = useRef(null);
+
+    const [isDraggingFruit, setIsDraggingFruit] = useState(false);
+    const [dropFeedback, setDropFeedback] = useState("");
+
     const [fruitCounts, setFruitCount] = useState({
         apple: 0,
         banana: 0,
@@ -139,25 +144,32 @@ export default function FruitFall() {
             const correctAmount = eval(animalRequest.expression);
 
             if (fruitType === expectedFruit) {
-                setFruitCount(prev => ({
-                    ...prev,
-                    [fruitType]: prev[fruitType] + 1,
-                }));
+                console.log("correct fruit!")
+            } else {
+                console.log("incorrect fruit!");
             }
 
-            console.log("Dropped the correct fruit!")
-
-            if (fruitCounts[fruitType] + 1 === correctAmount) {
-                alert("Great job!");
-                // Move to next animal or level
-                setCurrentAnimalIndex(prev => (prev + 1) % levelOneConfig[0].requestPool.length);
-                // Reset counts
-                setFruitCount({});
+            if (fruitCounts[fruitType] === correctAmount) {
+                console.log("correct amount!")
+                setDropFeedback("correct");
+                setTimeout(() => {
+                    setDropFeedback(""); // reset after a short delay
+                }, 500);
+                handleNextRequest();
+            } else {
+                console.log("incorrect amount!");
+                setDropFeedback("incorrect");
+                setTimeout(() => {
+                    setDropFeedback(""); // reset after a short delay
+                }, 500);
             }
         } else {
-            alert("Wrong Fruit!");
+            console.log("not intersecting!")
         }
+    }
 
+    const handleNextRequest = () => {
+        setCurrentAnimalIndex(prev => (prev + 1) % levelOneConfig[0].requestPool.length);
     }
 
 
@@ -186,6 +198,7 @@ export default function FruitFall() {
                     justifyContent="center"
                     alignItems="end"
                     gap={1}
+                    maxHeight="140px"
                 >
                     {/* Animal */}
                     <Animal
@@ -196,6 +209,9 @@ export default function FruitFall() {
                     {/* Basket */}
                     <Basket
                         basketImg={basket}
+                        basketRef={basketRef}
+                        isDragging={isDraggingFruit}
+                        dropFeedback={dropFeedback}
                     />
                 </Box>
 
@@ -205,6 +221,8 @@ export default function FruitFall() {
                     fruitCounts={fruitCounts}
                     onAdd={handleAdd}
                     onRemove={handleRemove}
+                    handleDrop={handleDrop}
+                    setIsDraggingFruit={setIsDraggingFruit}
                 />
             </Box>
 

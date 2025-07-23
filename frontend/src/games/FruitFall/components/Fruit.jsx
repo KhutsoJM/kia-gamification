@@ -5,10 +5,12 @@ import { useState, useRef } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Remove, Add } from "@mui/icons-material";
 
-export default function Fruit({ fruitImg, fruitType = "fruit", onAdd, onRemove, count = 2 }) {
+export default function Fruit({ fruitImg, fruitType = "fruit", onAdd, onRemove, onDrop, count = 2, setIsDraggingFruit }) {
 
     const [isDragging, setIsDragging] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
+
+    const fruitRef = useRef(null);
 
     return (
         <Box
@@ -42,6 +44,7 @@ export default function Fruit({ fruitImg, fruitType = "fruit", onAdd, onRemove, 
 
                 {(count > 0 || isDragging) &&
                     <motion.img
+                        ref={fruitRef}
                         src={fruitImg}
                         alt={fruitType}
                         drag
@@ -55,10 +58,15 @@ export default function Fruit({ fruitImg, fruitType = "fruit", onAdd, onRemove, 
                         }}
                         onHoverStart={() => setIsHovering(true)}
                         onHoverEnd={() => setIsHovering(false)}
-                        onDragStart={() => setIsDragging(true)}
+                        onDragStart={() => {
+                            setIsDragging(true);
+                            setIsDraggingFruit(true);
+                        }}
                         onDragEnd={() => {
                             setIsDragging(false);
                             setIsHovering(false);
+                            setIsDraggingFruit(false);
+                            onDrop(fruitRef, fruitType);
                         }}
                         style={{
                             position: "absolute",
