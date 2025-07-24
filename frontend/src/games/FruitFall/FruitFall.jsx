@@ -5,6 +5,8 @@ import { useState, useRef } from "react";
 import { Box, Button, Typography, IconButton } from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 
 // COMPONENTS
 import FruitRow from "./components/FruitRow";
@@ -185,46 +187,56 @@ export default function FruitFall() {
                 background: "linear-gradient(to right, #2d6a4f, #1b4332)",
             }}
         >
-
             {/* Animal and Fruit Row */}
-            <Box
-                display="flex"
-                flexDirection="column"
-                gap={5}
-            >
-                {/* Animal and Basket */}
+            <AnimatePresence mode="wait">
                 <Box
                     display="flex"
-                    justifyContent="center"
-                    alignItems="end"
-                    gap={1}
-                    maxHeight="140px"
+                    flexDirection="column"
+                    gap={5}
                 >
-                    {/* Animal */}
-                    <Animal
-                        animalImg={animalRequest.animalImg}
-                        animalType={animalRequest.animalType}
-                    />
+                    <motion.div
+                        key={currentAnimalIndex}
+                        initial={{ x: -100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 100, opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        style={{ display: "flex", justifyContent: "center" }}
+                    >
+                        {/* Animal and Basket */}
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="end"
+                            gap={1}
+                            maxHeight="140px"
+                        >
+                            {/* Animal */}
+                            <Animal
+                                animalImg={animalRequest.animalImg}
+                                animalType={animalRequest.animalType}
+                            />
 
-                    {/* Basket */}
-                    <Basket
-                        basketImg={basket}
-                        basketRef={basketRef}
-                        isDragging={isDraggingFruit}
-                        dropFeedback={dropFeedback}
+                            {/* Basket */}
+                            <Basket
+                                basketImg={basket}
+                                basketRef={basketRef}
+                                isDragging={isDraggingFruit}
+                                dropFeedback={dropFeedback}
+                            />
+                        </Box>
+                    </motion.div>
+
+                    {/* Fruit Row: Displays all the fruits */}
+                    <FruitRow
+                        fruits={fruitData}
+                        fruitCounts={fruitCounts}
+                        onAdd={handleAdd}
+                        onRemove={handleRemove}
+                        handleDrop={handleDrop}
+                        setIsDraggingFruit={setIsDraggingFruit}
                     />
                 </Box>
-
-                {/* Fruit Row: Displays all the fruits */}
-                <FruitRow
-                    fruits={fruitData}
-                    fruitCounts={fruitCounts}
-                    onAdd={handleAdd}
-                    onRemove={handleRemove}
-                    handleDrop={handleDrop}
-                    setIsDraggingFruit={setIsDraggingFruit}
-                />
-            </Box>
+            </AnimatePresence>
 
             <Button
                 variant="contained"

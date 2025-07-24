@@ -20,6 +20,7 @@ import KoalaBreathingGame from './games/KoalaBreathing/KoalaBreathingGame';
 import PuzzleGame from './games/PuzzleGame/PuzzleGame';
 import NumberSafari from './games/NumberSafari/NumberSafari';
 import FruitFall from './games/FruitFall/FruitFall';
+import LevelSelector from './games/FruitFall/LevelSelector';
 
 // UI
 import Navbar from './components/UI/Navbar';
